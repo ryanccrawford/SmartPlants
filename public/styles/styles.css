@@ -1,3 +1,11 @@
 .list-group-item {
   line-height: 2.5;
 }
+
+.margin-0 {
+  margin: 0;
+}
+
+.large-status-icon {
+  font-size: 48px;
+}
