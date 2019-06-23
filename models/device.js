@@ -1,6 +1,10 @@
 module.exports = function(sequelize, DataTypes) {
   var Device = sequelize.define("device", {
-    deviceName: DataTypes.STRING
+    deviceName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: { len: [4, 16] }
+    }
   });
 
   Device.associate = function(models) {

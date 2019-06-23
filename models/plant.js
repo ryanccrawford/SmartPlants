@@ -1,6 +1,10 @@
 module.exports = function(sequelize, DataTypes) {
   var Plant = sequelize.define("plant", {
-    plantName: DataTypes.STRING
+    plantName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: { len: [4, 16] }
+    }
   });
 
   Plant.associate = function(models) {
