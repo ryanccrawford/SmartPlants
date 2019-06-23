@@ -39,6 +39,11 @@ module.exports = function(app) {
     });
   });
 
+  // Render plant page - Will add ID later
+  app.get("/plant/:id", function(req, res) {
+    res.render("plant", {});
+  });
+
   // Render 404 page for any unmatched routes
   app.get("*", function(req, res) {
     res.render("404");
