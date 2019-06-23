@@ -1,0 +1,54 @@
+<div class="plantsHead container center-align">
+    <h1>Your Plants</h1>
+    <p>Click a plant to see how it's doing or add a new plant device.</p>
+</div>
+
+<!--New buttons will be appended to this div when a user enters a new plant device-->
+<div class="newPlantButtonsGoHere container center-align">
+    <a id="rose" data-id="rose" class="waves-effect waves-light btn">Rose</a>
+    <br><br>
+    <a id="tomato" data-id="tomato" class="waves-effect waves-light btn">Tomato</a>
+    <br><br>
+    <a id="cilantro" data-id="cilantro" class="waves-effect waves-light btn">Cilantro</a>
+    <br><br>
+</div>
+
+<!-- Modal Structure -->
+<div class="container center-align">
+    <div id="addDevice" class="modal">
+        <div class="modal-content">
+            <h4>Add a Device</h4>
+            <p>Enter information below to add a new plant device.</p>
+        </div>
+        <div class="row">
+            <form class="col s12 center-align">
+
+                <div class="row">
+                    <div class="input-field col offset-s3 s6 offset-m3 m6 offset-l4 l4">
+                        <input id="plantName" type="password" class="validate">
+                        <label for="plantName">Plant Name:</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col offset-s3 s6 offset-m3 m6 offset-l4 l4">
+                        <input id="deviceID" type="password" class="validate">
+                        <label for="deviceID">Device ID:</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat"><button class="btn"
+                    id="addDeviceButton">Add</button></a>
+        </div>
+    </div>
+
+
+    <!-- Modal Trigger -->
+    <button data-target="addDevice" class="btn modal-trigger">Add a New Plant Device</button>
+</div>
+
+<script>
+    $('#addDevice').modal()
+</script>
