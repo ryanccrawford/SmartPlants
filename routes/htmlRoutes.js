@@ -1,6 +1,8 @@
 var db = require("../models");
 
 module.exports = function(app) {
+  var plants = [];
+
   // Load index page
   app.get("/", function(req, res) {
     db.Example.findAll({}).then(function(dbExamples) {
@@ -21,11 +23,6 @@ module.exports = function(app) {
 
   app.get("/plantDevices", function(req, res) {
     res.render("plantDevices");
-  });
-
-  app.get("/plantDevices#addDevice", function(req, res) {
-    $(".modal").modal();
-    res.send("hi");
   });
 
   // Load example page and pass in an example by id
