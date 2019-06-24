@@ -73,8 +73,11 @@ function displayAllPlants() {
       var newA = $("<a>")
         .attr("href", "")
         .text("Go to Stats");
+      var newA2 = $("<a>")
+        .attr("href", "")
+        .text("Delete this Device");
 
-      newDiv6.append(newA);
+      newDiv6.append(newA, newA2);
       newDiv4.append(newDiv5, newDiv6);
       newDiv2.append(newDiv3, newDiv4);
       newDiv1.append(newDiv2);
@@ -110,8 +113,11 @@ var newDiv6 = $("<div>").addClass("card-action");
 var newA = $("<a>")
   .attr("href", "")
   .text("Go to Stats");
+var newA2 = $("<a>")
+  .attr("href", "")
+  .text("Delete this Device");
 
-newDiv6.append(newA);
+newDiv6.append(newA, newA2);
 newDiv4.append(newDiv5, newDiv6);
 newDiv2.append(newDiv3, newDiv4);
 newDiv1.append(newDiv2);
@@ -140,8 +146,11 @@ var newDiv6 = $("<div>").addClass("card-action");
 var newA = $("<a>")
   .attr("href", "")
   .text("Go to Stats");
+var newA2 = $("<a>")
+  .attr("href", "")
+  .text("Delete this Device");
 
-newDiv6.append(newA);
+newDiv6.append(newA, newA2);
 newDiv4.append(newDiv5, newDiv6);
 newDiv2.append(newDiv3, newDiv4);
 newDiv1.append(newDiv2);
