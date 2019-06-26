@@ -41,9 +41,11 @@ module.exports = function(app) {
   });
 
   app.post("/api/device", function(req, res) {
-    console.log(req.body);
     if (!("UserId" in req.body)) {
       console.log("bad request - UserId not included");
+      res.status(400).end();
+    } else if (!("PlantId" in req.body)) {
+      console.log("bad request - PlantId not included");
       res.status(400).end();
     } else {
       db.Device.create(req.body)
@@ -73,9 +75,14 @@ module.exports = function(app) {
   });
 
   app.post("/api/plant", function(req, res) {
-    db.Device.create(req.body).then(function(dbPlant) {
-      res.json(dbPlant);
-    });
+    db.Plant.create(req.body)
+      .then(function(dbPlant) {
+        res.json(dbPlant);
+      })
+      .catch(function(err) {
+        console.log(err);
+        res.status(400).end();
+      });
   });
 
   app.get("/api/live/:time?", function(req, res) {

@@ -12,6 +12,10 @@ module.exports = function(sequelize, DataTypes) {
     UserId: {
       type: DataTypes.INTEGER,
       validate: { isNumeric: true }
+    },
+    PlantId: {
+      type: DataTypes.INTEGER,
+      validate: { isNumeric: true }
     }
   });
 
@@ -19,11 +23,6 @@ module.exports = function(sequelize, DataTypes) {
     // We're saying that a Post should belong to an Author
     // A Post can't be created without an Author due to the foreign key constraint
     Device.belongsTo(models.User, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
-    Device.hasOne(models.Plant, {
       foreignKey: {
         allowNull: false
       }
