@@ -69,8 +69,6 @@ module.exports = function(app) {
       res.json(dbHistory);
     });
   });
-<<<<<<< Updated upstream
-=======
 
   // // Delete an example by id
   // app.delete("/api/examples/:id", function(req, res) {
@@ -107,5 +105,4 @@ module.exports = function(app) {
       res.send(body);
     });
   });
->>>>>>> Stashed changes
 };

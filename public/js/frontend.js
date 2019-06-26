@@ -57,6 +57,8 @@ function displayAllPlants() {
       var newImage = $("<img>")
         .attr("id", "img" + i)
         .attr("src", "")
+        .css("margin", "20px")
+        .css("border-radius", "20%")
         .attr("height", "150px");
 
       newDiv3.append(newImage);
@@ -110,6 +112,8 @@ var newDiv3 = $("<div>")
 var newImage = $("<img>")
   .attr("id", "img1")
   .attr("src", " ")
+  .css("margin", "20px")
+  .css("border-radius", "20%")
   .attr("height", "150px");
 
 newDiv3.append(newImage);
@@ -153,13 +157,15 @@ var newDiv3 = $("<div>")
 var newImage = $("<img>")
   .attr("id", "img2")
   .attr("src", "")
+  .css("margin", "20px")
+  .css("border-radius", "20%")
   .attr("height", "150px");
 
 newDiv3.append(newImage);
 
 var newDiv4 = $("<div>").addClass("card-stacked");
 var newDiv5 = $("<div>").addClass("card-content");
-var newH = $("<h3>").text("Cilantro");
+var newH = $("<h3>").text("Tulip");
 
 newDiv5.append(newH);
 
@@ -179,7 +185,7 @@ newDiv1.append(newDiv2);
 
 $(".newPlantButtonsGoHere").append(newDiv1);
 
-$.get("/api/images/" + "cilantro").done(function(data) {
+$.get("/api/images/" + "tulip").done(function(data) {
   var whichPlant = "#img" + 2;
   var json = JSON.parse(data);
   console.log(json);
