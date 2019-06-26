@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  var Device = sequelize.define("device", {
+  var Device = sequelize.define("Device", {
     deviceName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -10,12 +10,12 @@ module.exports = function(sequelize, DataTypes) {
   Device.associate = function(models) {
     // We're saying that a Post should belong to an Author
     // A Post can't be created without an Author due to the foreign key constraint
-    Device.belongsTo(models.user, {
+    Device.belongsTo(models.User, {
       foreignKey: {
         allowNull: false
       }
     });
-    Device.hasOne(models.plant, {
+    Device.hasOne(models.Plant, {
       foreignKey: {
         allowNull: false
       }
