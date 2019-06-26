@@ -53,11 +53,10 @@ function displayAllPlants() {
       var newDiv3 = $("<div>")
         .addClass("card-image")
         .css("width", "120px");
+
       var newImage = $("<img>")
-        .attr(
-          "src",
-          "https://eternitech.com/wp-content/uploads/2016/11/mongodb.png"
-        )
+        .attr("id", "img" + i)
+        .attr("src", "")
         .attr("height", "150px");
 
       newDiv3.append(newImage);
@@ -71,9 +70,11 @@ function displayAllPlants() {
       var newDiv6 = $("<div>").addClass("card-action");
       //need to figure out url to each plant for stats
       var newA = $("<a>")
+        .attr("id", "aOne" + i)
         .attr("href", "")
         .text("Go to Stats");
       var newA2 = $("<a>")
+        .attr("id", "aTwo" + i)
         .attr("href", "")
         .text("Delete this Device");
 
@@ -83,9 +84,19 @@ function displayAllPlants() {
       newDiv1.append(newDiv2);
 
       $(".newPlantButtonsGoHere").append(newDiv1);
+
+      $.get("/api/images/" + data[i].plantName).done(function(data) {
+        var whichPlant = "#img" + i;
+        var json = JSON.parse(data);
+        console.log(json);
+        var plantImage = json.images.value[0].thumbnailUrl;
+        console.log(plantImage);
+        $(whichPlant).attr("src", plantImage);
+      });
     }
   });
 }
+
 //Under here
 //is just an
 //example
@@ -97,14 +108,15 @@ var newDiv3 = $("<div>")
   .addClass("card-image")
   .css("width", "120px");
 var newImage = $("<img>")
-  .attr("src", "https://eternitech.com/wp-content/uploads/2016/11/mongodb.png")
+  .attr("id", "img1")
+  .attr("src", " ")
   .attr("height", "150px");
 
 newDiv3.append(newImage);
 
 var newDiv4 = $("<div>").addClass("card-stacked");
 var newDiv5 = $("<div>").addClass("card-content");
-var newH = $("<h3>").text("Plant Name");
+var newH = $("<h3>").text("Rose");
 
 newDiv5.append(newH);
 
@@ -123,6 +135,15 @@ newDiv2.append(newDiv3, newDiv4);
 newDiv1.append(newDiv2);
 
 $(".newPlantButtonsGoHere").append(newDiv1);
+
+$.get("/api/images/" + "rose").done(function(data) {
+  var whichPlant = "#img" + 1;
+  var json = JSON.parse(data);
+  console.log(json);
+  var plantImage = json.images.value[0].thumbnailUrl;
+  console.log(plantImage);
+  $(whichPlant).attr("src", plantImage);
+});
 
 var newDiv1 = $("<div>");
 var newDiv2 = $("<div>").addClass("card horizontal");
@@ -130,14 +151,15 @@ var newDiv3 = $("<div>")
   .addClass("card-image")
   .css("width", "120px");
 var newImage = $("<img>")
-  .attr("src", "https://eternitech.com/wp-content/uploads/2016/11/mongodb.png")
+  .attr("id", "img2")
+  .attr("src", "")
   .attr("height", "150px");
 
 newDiv3.append(newImage);
 
 var newDiv4 = $("<div>").addClass("card-stacked");
 var newDiv5 = $("<div>").addClass("card-content");
-var newH = $("<h3>").text("Plant Name");
+var newH = $("<h3>").text("Cilantro");
 
 newDiv5.append(newH);
 
@@ -156,3 +178,12 @@ newDiv2.append(newDiv3, newDiv4);
 newDiv1.append(newDiv2);
 
 $(".newPlantButtonsGoHere").append(newDiv1);
+
+$.get("/api/images/" + "cilantro").done(function(data) {
+  var whichPlant = "#img" + 2;
+  var json = JSON.parse(data);
+  console.log(json);
+  var plantImage = json.images.value[0].thumbnailUrl;
+  console.log(plantImage);
+  $(whichPlant).attr("src", plantImage);
+});
