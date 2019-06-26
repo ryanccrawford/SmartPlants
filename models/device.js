@@ -4,6 +4,14 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: { len: [4, 16] }
+    },
+    isDeviceConnected: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      validate: { isNumeric: true }
     }
   });
 

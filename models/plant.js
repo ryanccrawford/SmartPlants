@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: { len: [4, 16] }
-    }
+    },
+    image: DataTypes.STRING
   });
 
   Plant.associate = function(models) {
