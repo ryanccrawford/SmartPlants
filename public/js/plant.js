@@ -1,69 +1,29 @@
 $(document).ready(function() {
-  function getLabels(maxUnits, unitName, format) {
-    var labels = [];
-    for (var i = 0; i <= maxUnits; i++) {
-      var label = moment()
-        .subtract(maxUnits - i, unitName)
-        .format(format);
-      labels.push(label);
-    }
-    return labels;
-  }
-
-  function getLabelsFromRange(range) {
-    if (range === "day") {
-      return getLabels(24, "hours", "MM/DD, h:mm:ss a");
-    } else if (range === "week") {
-      return getLabels(7, "days", "MM/DD/YY");
-    } else if (range === "month") {
-      return getLabels(4, "weeks", "MM/DD/YY");
-    } else if (range === "year") {
-      return getLabels(12, "months", "MM/DD/YY");
-    }
-    /*
-    switch (range) {
-      case "day":
-        return getLabels(24, "hours", "MM/DD, h:mm:ss a");
-
-      case "week":
-        return getLabels(7, "days", "MM/DD/YY");
-
-      case "month":
-        return getLabels(4, "weeks", "MM/DD/YY");
-
-      case "year":
-        return getLabels(12, "months", "MM/DD/YY");
-
-      default:
-        break;
-    }
-    */
-  }
-
-  function getData(maxUnits, unitName, format) {
-    var labels = [];
+  function getData(maxUnits, unitName) {
+    var data = [];
     for (var i = 0; i <= maxUnits; i++) {
       var x = moment()
         .subtract(maxUnits - i, unitName)
-        .format(format);
+        .toDate()
+        .getTime();
       var y = Math.floor(Math.random() * 20);
-      labels.push({
+      data.push({
         x: x,
         y: y
       });
     }
-    return labels;
+    return data;
   }
 
   function getDataFromRange(range) {
     if (range === "day") {
-      return getData(24, "hours", "MM/DD, h:mm:ss a");
+      return getData(24, "hours");
     } else if (range === "week") {
-      return getData(7, "days", "MM/DD/YY");
+      return getData(7, "days");
     } else if (range === "month") {
-      return getData(4, "weeks", "MM/DD/YY");
+      return getData(4, "weeks");
     } else if (range === "year") {
-      return getData(12, "months", "MM/DD/YY");
+      return getData(12, "months");
     }
     /*
     switch (range) {
@@ -105,16 +65,27 @@ $(document).ready(function() {
   var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 
-  var $tabs = $(".tabs");
-  $tabs.tabs();
-  //$tabs.tabs("select", "summaryTab");
-
   function updateChart(range) {
     var data = getDataFromRange(range);
-    var cats = getLabelsFromRange(range);
     chart.updateOptions({
       xaxis: {
-        categories: cats
+        type: "datetime",
+        labels: {
+          rotate: -15,
+          rotateAlways: true,
+          formatter: function(val, timestamp) {
+            var datetime = moment(new Date(timestamp));
+            if (range === "day") {
+              return datetime.format("MM/DD, h:mm a");
+            } else if (range === "week") {
+              return datetime.format("DD MMM");
+            } else if (range === "month") {
+              return datetime.format("DD MMM");
+            } else if (range === "year") {
+              return datetime.format("MMM YYYY");
+            }
+          }
+        }
       }
     });
     chart.updateSeries([
@@ -126,10 +97,19 @@ $(document).ready(function() {
 
   updateChart("day");
 
+  $.fn.dataTable.ext.classes.sPageButton = "waves-effect waves-light btn";
+  $("#dataTable").DataTable({
+    searching: false,
+    order: [[0, "desc"]]
+  });
+
+  var $tabs = $(".tabs");
+  $tabs.tabs();
+
   $("select")
     .formSelect()
     .change(function() {
-      var value = $(this).val();
+      var value = $("#rangeSelect").val();
       updateChart(value);
     });
 });

@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  var Plant = sequelize.define("plant", {
+  var Plant = sequelize.define("Plant", {
     plantName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -8,12 +8,12 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Plant.associate = function(models) {
-    Plant.belongsTo(models.device, {
+    Plant.belongsTo(models.Device, {
       foreignKey: {
         allowNull: false
       }
     });
-    Plant.hasMany(models.hist_stats, {
+    Plant.hasMany(models.HistStats, {
       foreignKey: {
         allowNull: false
       }

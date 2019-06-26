@@ -1,6 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
   var HistStats = sequelize.define(
-    "hist_stats",
+    "HistStats",
     {
       timeStamp: DataTypes.DATE,
       moisture: DataTypes.INTEGER,
@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
   HistStats.associate = function(models) {
     // We're saying that a Post should belong to an Author
     // A Post can't be created without an Author due to the foreign key constraint
-    HistStats.belongsTo(models.plant, {
+    HistStats.belongsTo(models.Plant, {
       foreignKey: {
         allowNull: false
       }

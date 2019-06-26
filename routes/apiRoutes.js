@@ -8,6 +8,12 @@ module.exports = function(app) {
     });
   });
 
+  app.post("/api/users", function(req, res) {
+    db.User.create(req.body).then(function(dbUser) {
+      res.json(dbUser);
+    });
+  });
+
   app.get("/api/user/:userName", function(req, res) {
     db.User.findOne({ where: { userName: req.params.userName } }).then(function(
       user
@@ -62,13 +68,4 @@ module.exports = function(app) {
       res.json(dbHistory);
     });
   });
-
-  // // Delete an example by id
-  // app.delete("/api/examples/:id", function(req, res) {
-  //   db.Example.destroy({ where: { id: req.params.id } }).then(function(
-  //     dbExample
-  //   ) {
-  //     res.json(dbExample);
-  //   });
-  // });
 };
