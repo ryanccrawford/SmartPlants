@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  /*
   function getData(maxUnits, unitName) {
     var data = [];
     for (var i = 0; i <= maxUnits; i++) {
@@ -14,32 +15,51 @@ $(document).ready(function() {
     }
     return data;
   }
+  */
 
-  function getDataFromRange(range) {
-    if (range === "day") {
-      return getData(24, "hours");
-    } else if (range === "week") {
-      return getData(7, "days");
-    } else if (range === "month") {
-      return getData(4, "weeks");
-    } else if (range === "year") {
-      return getData(12, "months");
+  function convertedData(data) {
+    for (var i = 0; i <= maxUnits; i++) {
+      var x = moment()
+        .subtract(maxUnits - i, unitName)
+        .toDate()
+        .getTime();
+      var y = Math.floor(Math.random() * 20);
+      data.push({
+        x: x,
+        y: y
+      });
     }
-    /*
-    switch (range) {
-      case "day":
-        return getData(24, "hours", "MM/DD, h:mm:ss a");
+    return data;
+  }
 
-      case "week":
-        return getData(7, "days", "MM/DD/YY");
-
-      case "month":
-        return getData(4, "weeks", "MM/DD/YY");
-
-      case "year":
-        return getData(12, "months", "MM/DD/YY");
-    }
-    */
+  function getDataFromRange(property, range) {
+    // Return new promise
+    return new Promise(function(resolve, reject) {
+      // Do async job
+      var interval;
+      if (range === "day") {
+        interval = "hour";
+      } else if (range === "week") {
+        interval = "day";
+      } else if (range === "month") {
+        interval = "day";
+      } else if (range === "year") {
+        interval = "month";
+      }
+      url = "/api/averages?property=";
+      url += property;
+      url += "&range=";
+      url += range;
+      url += "&interval=";
+      url += interval;
+      $.get(url)
+        .done(function(data) {
+          resolve(convertedData(data));
+        })
+        .fail(function(error) {
+          reject(error);
+        });
+    });
   }
 
   var options = {
@@ -65,34 +85,39 @@ $(document).ready(function() {
   var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 
-  function updateChart(range) {
-    var data = getDataFromRange(range);
-    chart.updateOptions({
-      xaxis: {
-        type: "datetime",
-        labels: {
-          rotate: -15,
-          rotateAlways: true,
-          formatter: function(val, timestamp) {
-            var datetime = moment(new Date(timestamp));
-            if (range === "day") {
-              return datetime.format("MM/DD, h:mm a");
-            } else if (range === "week") {
-              return datetime.format("DD MMM");
-            } else if (range === "month") {
-              return datetime.format("DD MMM");
-            } else if (range === "year") {
-              return datetime.format("MMM YYYY");
+  function updateChart(property, range) {
+    getDataFromRange(property, range)
+      .then(function(data) {
+        chart.updateOptions({
+          xaxis: {
+            type: "datetime",
+            labels: {
+              rotate: -15,
+              rotateAlways: true,
+              formatter: function(val, timestamp) {
+                var datetime = moment(new Date(timestamp));
+                if (range === "day") {
+                  return datetime.format("MM/DD, h:mm a");
+                } else if (range === "week") {
+                  return datetime.format("DD MMM");
+                } else if (range === "month") {
+                  return datetime.format("DD MMM");
+                } else if (range === "year") {
+                  return datetime.format("MMM YYYY");
+                }
+              }
             }
           }
-        }
-      }
-    });
-    chart.updateSeries([
-      {
-        data: data
-      }
-    ]);
+        });
+        chart.updateSeries([
+          {
+            data: data
+          }
+        ]);
+      })
+      .catch(function(error) {
+        throw error;
+      });
   }
 
   updateChart("day");
@@ -110,6 +135,6 @@ $(document).ready(function() {
     .formSelect()
     .change(function() {
       var value = $("#rangeSelect").val();
-      updateChart(value);
+      updateChart("moisture", value);
     });
 });

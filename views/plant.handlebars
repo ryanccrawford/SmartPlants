@@ -143,33 +143,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>01/01/01 00:00</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-          </tr>
-          <tr>
-            <td>01/01/01 01:00</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-          </tr>
-          <tr>
-            <td>01/01/01 02:00</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-            <td>999</td>
-          </tr>
+          {{#each datapoint}}
+          {{> plant/datapoint-block}}
+          {{/each}}
         </tbody>
       </table>
     </div>
