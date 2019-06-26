@@ -4,11 +4,21 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: { len: [4, 16] }
-    }
+    },
+    image: DataTypes.STRING
+    // tempMinFehr: DataTypes.FLOAT,
+    // shadeTolerance: DataTypes.STRING,
+    // precMinInches: DataTypes.INTEGER,
+    // precMaxInches: DataTypes.INTEGER,
   });
 
   Plant.associate = function(models) {
-    Plant.belongsTo(models.Device, {
+    Plant.hasOne(models.Device, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
+    Plant.hasMany(models.LiveStats, {
       foreignKey: {
         allowNull: false
       }
@@ -19,5 +29,6 @@ module.exports = function(sequelize, DataTypes) {
       }
     });
   };
+
   return Plant;
 };
