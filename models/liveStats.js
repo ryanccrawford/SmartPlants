@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   LiveStats.associate = function(models) {
-    LiveStats.belongsTo(models.Plant, {
+    LiveStats.belongsTo(models.Device, {
       foreignKey: {
         allowNull: false
       }

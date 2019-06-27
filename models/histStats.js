@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   HistStats.associate = function(models) {
-    HistStats.belongsTo(models.Plant, {
+    HistStats.belongsTo(models.Device, {
       foreignKey: {
         allowNull: false
       }

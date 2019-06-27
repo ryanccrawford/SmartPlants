@@ -27,6 +27,17 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       }
     });
+    Device.hasMany(models.LiveStats, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
+    Device.hasMany(models.HistStats, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
   };
+
   return Device;
 };
