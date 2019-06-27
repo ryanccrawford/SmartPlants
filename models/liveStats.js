@@ -1,8 +1,12 @@
 module.exports = function(sequelize, DataTypes) {
-  var HistStats = sequelize.define(
-    "HistStats",
+  var LiveStats = sequelize.define(
+    "LiveStats",
     {
-      timeStamp: DataTypes.DATE,
+      timeStamp: {
+        type: "TIMESTAMP",
+        defaultValue: sequelize.fn("NOW"),
+        allowNull: false
+      },
       moisture: DataTypes.INTEGER,
       light: DataTypes.INTEGER,
       sensorTempFehr: DataTypes.FLOAT,
@@ -21,12 +25,12 @@ module.exports = function(sequelize, DataTypes) {
     }
   );
 
-  HistStats.associate = function(models) {
-    HistStats.belongsTo(models.Device, {
+  LiveStats.associate = function(models) {
+    LiveStats.belongsTo(models.Device, {
       foreignKey: {
         allowNull: false
       }
     });
   };
-  return HistStats;
+  return LiveStats;
 };

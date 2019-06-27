@@ -13,17 +13,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Plant.associate = function(models) {
-    Plant.hasOne(models.Device, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
-    Plant.hasMany(models.LiveStats, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
-    Plant.hasMany(models.HistStats, {
+    Plant.hasMany(models.Device, {
       foreignKey: {
         allowNull: false
       }
