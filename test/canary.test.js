@@ -1,9 +1,9 @@
-var mocha = require("mocha");
 var chai = require("chai");
-
-var describe = mocha.describe;
-var it = mocha.it;
+var chaiHttp = require("chai-http");
 var expect = chai.expect;
+
+// Setting up the chai http plugin
+chai.use(chaiHttp);
 
 describe("canary test", function() {
   // A "canary" test is one we set up to always pass
