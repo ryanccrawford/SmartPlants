@@ -91,7 +91,7 @@ module.exports = function(app) {
   app.get("/api/live", function(req, res) {
     var interval = req.body.interval;
     var range = req.body.range;
-    var plantId = req.body.plantId;
+    var deviceId = req.body.deviceId;
 
     var sqlQuery = "SELECT ";
 
@@ -129,8 +129,8 @@ module.exports = function(app) {
     if (typeof range !== "undefined") {
       sqlQuery += " AND timeStamp > NOW() - INTERVAL 1 " + range;
     }
-    if (typeof plantId !== "undefined") {
-      sqlQuery += " AND PlantId = " + plantId;
+    if (typeof deviceId !== "undefined") {
+      sqlQuery += " AND DeviceId = " + deviceId;
     }
 
     sqlQuery += " GROUP BY tTime ";
@@ -147,8 +147,8 @@ module.exports = function(app) {
   });
 
   app.post("/api/live", function(req, res) {
-    if (!("PlantId" in req.body)) {
-      console.log("bad request - PlantId not included");
+    if (!("DeviceId" in req.body)) {
+      console.log("bad request - DeviceId not included");
       res.status(400).end();
     } else {
       db.LiveStats.create(req.body)
@@ -165,7 +165,7 @@ module.exports = function(app) {
   app.get("/api/hist", function(req, res) {
     var interval = req.body.interval;
     var range = req.body.range;
-    var plantId = req.body.plantId;
+    var deviceId = req.body.deviceId;
 
     var sqlQuery = "SELECT ";
 
@@ -203,8 +203,8 @@ module.exports = function(app) {
     if (typeof range !== "undefined") {
       sqlQuery += " AND timeStamp > NOW() - INTERVAL 1 " + range;
     }
-    if (typeof plantId !== "undefined") {
-      sqlQuery += " AND PlantId = " + plantId;
+    if (typeof deviceId !== "undefined") {
+      sqlQuery += " AND DeviceID = " + DeviceId;
     }
 
     sqlQuery += " GROUP BY tTime ";
