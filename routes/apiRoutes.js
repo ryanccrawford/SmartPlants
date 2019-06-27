@@ -1,4 +1,5 @@
 var db = require("../models");
+var request = require("request");
 
 module.exports = function(app) {
   // users functions
@@ -103,6 +104,42 @@ module.exports = function(app) {
   app.post("/api/histStat", function(req, res) {
     db.HistStat.create(req.body).then(function(dbHistory) {
       res.json(dbHistory);
+    });
+  });
+
+  // // Delete an example by id
+  // app.delete("/api/examples/:id", function(req, res) {
+  //   db.Example.destroy({ where: { id: req.params.id } }).then(function(
+  //     dbExample
+  //   ) {
+  //     res.json(dbExample);
+  //   });
+  // });
+
+  app.get("/api/images/:name", function(req, res) {
+    var s = req.params.name;
+    var options = {
+      method: "GET",
+      url: "https://eastus.api.cognitive.microsoft.com/bing/v7.0/search",
+      qs: {
+        q: s,
+        responseFilter: "images"
+      },
+      headers: {
+        "cache-control": "no-cache",
+        Connection: "keep-alive",
+        Host: "eastus.api.cognitive.microsoft.com",
+        "Cache-Control": "no-cache",
+        Accept: "application/json",
+        "Ocp-Apim-Subscription-Key": "0c8a310a0e794a7bb64c1bc87a76c202"
+      }
+    };
+
+    request(options, function(error, response, body) {
+      // eslint-disable-next-line curly
+      if (error) throw new Error(error);
+
+      res.send(body);
     });
   });
 };
