@@ -1,5 +1,7 @@
 var db = require("../models");
 var request = require("request");
+var Op = db.Sequelize.Op;
+var moment = require("moment");
 
 module.exports = function(app) {
   // users functions
@@ -86,35 +88,143 @@ module.exports = function(app) {
       });
   });
 
-  app.get("/api/live/:time?", function(req, res) {
-    // check for time = null
-    db.LiveStat.findAll({
-      where: { timeStamp: req.params.time } // find doc for greater than
-    }).then(function(data) {
-      res.json(data);
-    });
+  app.get("/api/live", function(req, res) {
+    var interval = req.body.interval;
+    var range = req.body.range;
+    var deviceId = req.body.deviceId;
+
+    var sqlQuery = "SELECT ";
+
+    var sqlInterval = null;
+    if (!(typeof interval === "undefined")) {
+      if (interval === "minute") {
+        sqlInterval = " left(timeStamp, 16) as tTime, ";
+      } else if (interval === "hour") {
+        sqlInterval = " left(timeStamp, 13) as tTime, ";
+      } else if (interval === "day") {
+        sqlInterval = " left(timeStamp, 10) as tTime, ";
+      } else if (interval === "month") {
+        sqlInterval = " left(timeStamp, 7) as tTime, ";
+      } else if (interval === "year") {
+        sqlInterval = " left(timeStamp, 4) as tTime, ";
+      } else {
+        sqlInterval = "timestamp as tTime, ";
+      }
+    } else {
+      sqlInterval = "timestamp as tTime, ";
+    }
+    sqlQuery += sqlInterval;
+
+    sqlQuery +=
+      " avg(moisture) as moisture, " +
+      " avg(light) as light, " +
+      " avg(sensorTempFehr) as sensorTemp, " +
+      " avg(weatherTemp) as weatherTemp, " +
+      " avg(precipIntensity) as precipIntensity, " +
+      " avg(humidity) as humidity, " +
+      " avg(windSpeed) as windSpeed ";
+    sqlQuery += " FROM liveStats ";
+
+    sqlQuery += " WHERE 1=1 ";
+    if (typeof range !== "undefined") {
+      sqlQuery += " AND timeStamp > NOW() - INTERVAL 1 " + range;
+    }
+    if (typeof deviceId !== "undefined") {
+      sqlQuery += " AND DeviceId = " + deviceId;
+    }
+
+    sqlQuery += " GROUP BY tTime ";
+
+    db.sequelize
+      .query(sqlQuery)
+      .then(function(data) {
+        res.json(data);
+      })
+      .catch(function(err) {
+        console.log(err);
+        res.status(400).end();
+      });
   });
 
-  app.post("/api/liveStat", function(req, res) {
-    db.LiveStat.create(req.body).then(function(data) {
-      res.json(data);
-    });
+  app.post("/api/live", function(req, res) {
+    if (!("DeviceId" in req.body)) {
+      console.log("bad request - DeviceId not included");
+      res.status(400).end();
+    } else {
+      db.LiveStats.create(req.body)
+        .then(function(data) {
+          res.json(data);
+        })
+        .catch(function(err) {
+          console.log(err);
+          res.status(400).end();
+        });
+    }
   });
 
-  app.post("/api/histStat", function(req, res) {
-    db.HistStat.create(req.body).then(function(dbHistory) {
+  app.get("/api/hist", function(req, res) {
+    var interval = req.body.interval;
+    var range = req.body.range;
+    var deviceId = req.body.deviceId;
+
+    var sqlQuery = "SELECT ";
+
+    var sqlInterval = null;
+    if (!(typeof interval === "undefined")) {
+      if (interval === "minute") {
+        sqlInterval = " left(timeStamp, 16) as tTime, ";
+      } else if (interval === "hour") {
+        sqlInterval = " left(timeStamp, 13) as tTime, ";
+      } else if (interval === "day") {
+        sqlInterval = " left(timeStamp, 10) as tTime, ";
+      } else if (interval === "month") {
+        sqlInterval = " left(timeStamp, 7) as tTime, ";
+      } else if (interval === "year") {
+        sqlInterval = " left(timeStamp, 4) as tTime, ";
+      } else {
+        sqlInterval = "timestamp as tTime, ";
+      }
+    } else {
+      sqlInterval = "timestamp as tTime, ";
+    }
+    sqlQuery += sqlInterval;
+
+    sqlQuery +=
+      " avg(moisture) as moisture, " +
+      " avg(light) as light, " +
+      " avg(sensorTempFehr) as sensorTemp, " +
+      " avg(weatherTemp) as weatherTemp, " +
+      " avg(precipIntensity) as precipIntensity, " +
+      " avg(humidity) as humidity, " +
+      " avg(windSpeed) as windSpeed ";
+    sqlQuery += " FROM liveStats ";
+
+    sqlQuery += " WHERE 1=1 ";
+    if (typeof range !== "undefined") {
+      sqlQuery += " AND timeStamp > NOW() - INTERVAL 1 " + range;
+    }
+    if (typeof deviceId !== "undefined") {
+      sqlQuery += " AND DeviceID = " + DeviceId;
+    }
+
+    sqlQuery += " GROUP BY tTime ";
+
+    db.sequelize
+      .query(sqlQuery)
+      .then(function(data) {
+        res.json(data);
+      })
+      .catch(function(err) {
+        console.log(err);
+        res.status(400).end();
+      });
+  });
+
+  app.post("/api/hist", function(req, res) {
+    db.HistStats.create(req.body).then(function(dbHistory) {
       res.json(dbHistory);
     });
   });
-
-  // // Delete an example by id
-  // app.delete("/api/examples/:id", function(req, res) {
-  //   db.Example.destroy({ where: { id: req.params.id } }).then(function(
-  //     dbExample
-  //   ) {
-  //     res.json(dbExample);
-  //   });
-  // });
 
   app.get("/api/images/:name", function(req, res) {
     var s = req.params.name;
