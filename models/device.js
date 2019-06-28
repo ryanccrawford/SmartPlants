@@ -9,6 +9,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
+    deviceIP: {
+      type: DataTypes.STRING,
+      validate: { isIP: true }
+    },
     UserId: {
       type: DataTypes.INTEGER,
       validate: { isNumeric: true }
