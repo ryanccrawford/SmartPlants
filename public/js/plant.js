@@ -1,38 +1,7 @@
 $(document).ready(function() {
-  /*
-  function getData(maxUnits, unitName) {
-    var data = [];
-    for (var i = 0; i <= maxUnits; i++) {
-      var x = moment()
-        .subtract(maxUnits - i, unitName)
-        .toDate()
-        .getTime();
-      var y = Math.floor(Math.random() * 20);
-      data.push({
-        x: x,
-        y: y
-      });
-    }
-    return data;
-  }
-  */
+  var histData;
 
-  function convertedData(data) {
-    for (var i = 0; i <= maxUnits; i++) {
-      var x = moment()
-        .subtract(maxUnits - i, unitName)
-        .toDate()
-        .getTime();
-      var y = Math.floor(Math.random() * 20);
-      data.push({
-        x: x,
-        y: y
-      });
-    }
-    return data;
-  }
-
-  function getDataFromRange(property, range) {
+  function getDataFromRange(range) {
     // Return new promise
     return new Promise(function(resolve, reject) {
       // Do async job
@@ -46,15 +15,16 @@ $(document).ready(function() {
       } else if (range === "year") {
         interval = "month";
       }
-      url = "/api/averages?property=";
-      url += property;
+      //url = "/api/hist?range=";
+      url = "/api/hist?plantId=";
+      url += window.location.pathname.replace("/plant/", "");
       url += "&range=";
       url += range;
       url += "&interval=";
       url += interval;
       $.get(url)
         .done(function(data) {
-          resolve(convertedData(data));
+          resolve(data);
         })
         .fail(function(error) {
           reject(error);
@@ -85,42 +55,47 @@ $(document).ready(function() {
   var chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
 
-  function updateChart(property, range) {
-    getDataFromRange(property, range)
-      .then(function(data) {
-        chart.updateOptions({
-          xaxis: {
-            type: "datetime",
-            labels: {
-              rotate: -15,
-              rotateAlways: true,
-              formatter: function(val, timestamp) {
-                var datetime = moment(new Date(timestamp));
-                if (range === "day") {
-                  return datetime.format("MM/DD, h:mm a");
-                } else if (range === "week") {
-                  return datetime.format("DD MMM");
-                } else if (range === "month") {
-                  return datetime.format("DD MMM");
-                } else if (range === "year") {
-                  return datetime.format("MMM YYYY");
-                }
-              }
-            }
-          }
-        });
-        chart.updateSeries([
-          {
-            data: data
-          }
-        ]);
-      })
-      .catch(function(error) {
-        throw error;
-      });
+  function formatString(range) {
+    if (range === "day") {
+      return "MM/DD, h:mm a";
+    } else if (range === "week") {
+      return "DD MMM";
+    } else if (range === "month") {
+      return "DD MMM";
+    } else if (range === "year") {
+      return "MMM YYYY";
+    }
   }
 
-  updateChart("day");
+  function updateChart(data, range) {
+    chart.updateOptions({
+      xaxis: {
+        type: "datetime",
+        labels: {
+          rotate: -15,
+          rotateAlways: true,
+          formatter: function(val, timestamp) {
+            var datetime = moment(new Date(timestamp));
+            return datetime.format(formatString(range));
+          }
+        }
+      }
+    });
+    chart.updateSeries([
+      {
+        data: data
+      }
+    ]);
+  }
+
+  function getPropertyData(data, propertyName) {
+    return data.map(function(dataPoint) {
+      return {
+        x: dataPoint.timeStamp,
+        y: dataPoint[propertyName]
+      };
+    });
+  }
 
   $.fn.dataTable.ext.classes.sPageButton = "waves-effect waves-light btn";
   $("#dataTable").DataTable({
@@ -131,10 +106,28 @@ $(document).ready(function() {
   var $tabs = $(".tabs");
   $tabs.tabs();
 
-  $("select")
+  $("#rangeSelect")
     .formSelect()
     .change(function() {
-      var value = $("#rangeSelect").val();
-      updateChart("moisture", value);
+      var range = $(this).val();
+      getDataFromRange(range)
+        .then(function(data) {
+          histData = data;
+          var property = $("#propertySelect").val();
+          var propertyData = getPropertyData(data, property);
+          updateChart(propertyData, range);
+        })
+        .catch(function(error) {
+          throw error;
+        });
+    });
+
+  $("#propertySelect")
+    .formSelect()
+    .change(function() {
+      var range = $("rangeSelect").val();
+      var property = $(this).val();
+      var propertyData = getPropertyData(histData, property);
+      updateChart(propertyData, range);
     });
 });

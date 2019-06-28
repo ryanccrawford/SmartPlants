@@ -18,5 +18,3 @@ $("#loginButton").on("click", function() {
     });
   });
 });
-
-

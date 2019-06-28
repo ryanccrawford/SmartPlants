@@ -1,155 +1,163 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 
-<div class="container">
-  <div class="row">
-    <div class="col s12 pt-1">
-      <a href="#" class="left-align">Back to Devices</a>
-      <h3 class="center-align mt-0">My Mustard Plant</h3>
-      <ul class="tabs tabs-fixed-width z-depth-1">
-        <li class="tab col s3"><a href="#summaryTab" class="active">Summary</a></li>
-        <li class="tab col s3"><a href="#chartTab">Chart</a></li>
-        <li class="tab col s3"><a href="#dataTab">Data</a></li>
-      </ul>
-    </div>
-    <div id="summaryTab" class="col s12">
-      <div class="row">
-        <div class="col s12 m6 xl4">
-          <div class="card">
-            <div class="card-content">
-              <div class="row margin-0">
-                <div class="col s3 center-align">
-                  <i class="fas fa-tint large-status-icon green-text"></i>
-                </div>
-                <div class="col s9">
-                  <span class="card-title green-text">GOOD</span>
-                  <p>Moisture</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col s12 m6 xl4">
-          <div class="card">
-            <div class="card-content">
-              <div class="row margin-0">
-                <div class="col s3 center-align">
-                  <i class="fas fa-sun large-status-icon green-text"></i>
-                </div>
-                <div class="col s9">
-                  <span class="card-title green-text">GOOD</span>
-                  <p>Light</p>
+<div class="skyDim"></div>
+<div class="sky"></div>
+
+<div class="entireInfo">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 pt-1">
+        <a href="/plantDevices" class="left-align">Back to Devices</a>
+        <h3 class="center-align mt-0">My Mustard Plant</h3>
+        <ul class="tabs tabs-fixed-width z-depth-1">
+          <li class="tab col s3"><a href="#summaryTab" class="active">Summary</a></li>
+          <li class="tab col s3"><a href="#chartTab">Chart</a></li>
+          <li class="tab col s3"><a href="#dataTab">Data</a></li>
+        </ul>
+      </div>
+      <div id="summaryTab" class="col s12">
+        <div class="row">
+          <div class="col s12 m6 xl4">
+            <div class="card">
+              <div class="card-content">
+                <div class="row margin-0">
+                  <div class="col s3 center-align">
+                    <i class="fas fa-tint large-status-icon green-text"></i>
+                  </div>
+                  <div class="col s9">
+                    <span class="card-title green-text">GOOD</span>
+                    <p>Moisture</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col s12 m6 xl4">
-          <div class="card">
-            <div class="card-content">
-              <div class="row margin-0">
-                <div class="col s3 center-align">
-                  <i class="fas fa-thermometer-half large-status-icon yellow-text text-darken-2"></i>
-                </div>
-                <div class="col s9">
-                  <span class="card-title yellow-text text-darken-2">TOO HIGH</span>
-                  <p>Temperature</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col s12 m6 xl4">
-          <div class="card">
-            <div class="card-content">
-              <div class="row margin-0">
-                <div class="col s3 center-align">
-                  <i class="fas fa-cloud-rain large-status-icon yellow-text text-darken-2"></i>
-                </div>
-                <div class="col s9">
-                  <span class="card-title yellow-text text-darken-2">TOO LOW</span>
-                  <p>Precipitation</p>
+          <div class="col s12 m6 xl4">
+            <div class="card">
+              <div class="card-content">
+                <div class="row margin-0">
+                  <div class="col s3 center-align">
+                    <i class="fas fa-sun large-status-icon green-text"></i>
+                  </div>
+                  <div class="col s9">
+                    <span class="card-title green-text">GOOD</span>
+                    <p>Light</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col s12 m6 xl4">
-          <div class="card">
-            <div class="card-content">
-              <div class="row margin-0">
-                <div class="col s3 center-align">
-                  <i class="fas fa-smog large-status-icon red-text"></i>
-                </div>
-                <div class="col s9">
-                  <span class="card-title red-text">DANGER</span>
-                  <p>Humidity</p>
+          <div class="col s12 m6 xl4">
+            <div class="card">
+              <div class="card-content">
+                <div class="row margin-0">
+                  <div class="col s3 center-align">
+                    <i class="fas fa-thermometer-half large-status-icon yellow-text text-darken-2"></i>
+                  </div>
+                  <div class="col s9">
+                    <span class="card-title yellow-text text-darken-2">TOO HIGH</span>
+                    <p>Temperature</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col s12 m6 xl4">
-          <div class="card">
-            <div class="card-content">
-              <div class="row margin-0">
-                <div class="col s3 center-align">
-                  <i class="fas fa-wind large-status-icon red-text"></i>
+          <div class="col s12 m6 xl4">
+            <div class="card">
+              <div class="card-content">
+                <div class="row margin-0">
+                  <div class="col s3 center-align">
+                    <i class="fas fa-cloud-rain large-status-icon yellow-text text-darken-2"></i>
+                  </div>
+                  <div class="col s9">
+                    <span class="card-title yellow-text text-darken-2">TOO LOW</span>
+                    <p>Precipitation</p>
+                  </div>
                 </div>
-                <div class="col s9">
-                  <span class="card-title red-text">DANGER</span>
-                  <p>Wind Speed</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 xl4">
+            <div class="card">
+              <div class="card-content">
+                <div class="row margin-0">
+                  <div class="col s3 center-align">
+                    <i class="fas fa-smog large-status-icon red-text"></i>
+                  </div>
+                  <div class="col s9">
+                    <span class="card-title red-text">DANGER</span>
+                    <p>Humidity</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 xl4">
+            <div class="card">
+              <div class="card-content">
+                <div class="row margin-0">
+                  <div class="col s3 center-align">
+                    <i class="fas fa-wind large-status-icon red-text"></i>
+                  </div>
+                  <div class="col s9">
+                    <span class="card-title red-text">DANGER</span>
+                    <p>Wind Speed</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div id="chartTab" class="col s12">
-      <div class="row">
-        <div class="input-field col s12 m6">
-          <select id="propertySelect">
-            <option value="1" selected>Moisture</option>
-            <option value="2">Light</option>
-            <option value="3">Temperature</option>
-            <option value="4">Precipitation</option>
-            <option value="5">Humidity</option>
-            <option value="6">Wind Speed</option>
-          </select>
+      <div id="chartTab" class="col s12 card">
+        <div class="row">
+          <div class="input-field col s12 m6">
+            <select id="propertySelect">
+              <option value="1" selected>Moisture</option>
+              <option value="2">Light</option>
+              <option value="3">Temperature</option>
+              <option value="4">Precipitation</option>
+              <option value="5">Humidity</option>
+              <option value="6">Wind Speed</option>
+            </select>
+          </div>
+          <div class="input-field col s12 m6">
+            <select id="rangeSelect">
+              <option value="day" selected>Day</option>
+              <option value="week">Week</option>
+              <option value="month">Month</option>
+              <option value="year">Year</option>
+              <option value="all">All</option>
+            </select>
+          </div>
         </div>
-        <div class="input-field col s12 m6">
-          <select id="rangeSelect">
-            <option value="day" selected>Day</option>
-            <option value="week">Week</option>
-            <option value="month">Month</option>
-            <option value="year">Year</option>
-            <option value="all">All</option>
-          </select>
-        </div>
+        <div id="chart"></div>
       </div>
-      <div id="chart"></div>
-    </div>
-    <div id="dataTab" class="col s12">
-      <table id="dataTable">
-        <thead>
-          <tr>
-            <th>Timestamp</th>
-            <th>Moisture</th>
-            <th>Light</th>
-            <th>Temperature</th>
-            <th>Precipitation</th>
-            <th>Humidity</th>
-            <th>Wind Speed</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each datapoint}}
-          {{> plant/datapoint-block}}
-          {{/each}}
-        </tbody>
-      </table>
+      <div id="dataTab" class="col s12 card">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Moisture</th>
+              <th>Light</th>
+              <th>Temperature</th>
+              <th>Precipitation</th>
+              <th>Humidity</th>
+              <th>Wind Speed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each LiveStats}}
+            {{> plant/datapoint-block}}
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+</div>
+
+<div class="grassDiv">
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
