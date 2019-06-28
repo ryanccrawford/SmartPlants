@@ -134,7 +134,7 @@ module.exports = function(app) {
     sqlQuery += " GROUP BY tTime ";
 
     db.sequelize
-      .query(sqlQuery)
+      .query(sqlQuery, { type: Sequelize.QueryTypes.SELECT })
       .then(function(data) {
         res.json(data);
       })
@@ -202,13 +202,13 @@ module.exports = function(app) {
       sqlQuery += " AND timeStamp > NOW() - INTERVAL 1 " + range;
     }
     if (typeof deviceId !== "undefined") {
-      sqlQuery += " AND DeviceID = " + DeviceId;
+      sqlQuery += " AND DeviceId = " + deviceId;
     }
 
     sqlQuery += " GROUP BY tTime ";
 
     db.sequelize
-      .query(sqlQuery)
+      .query(sqlQuery, { type: Sequelize.QueryTypes.SELECT })
       .then(function(data) {
         res.json(data);
       })
