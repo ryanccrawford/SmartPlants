@@ -1,57 +1,66 @@
-
 <div class="skyDim"></div>
 <div class="sky"></div>
 <div class="entireDevices">
-<div class="plantsHead container center-align">
-    <h1>Your Plants</h1>
-    <p>Click a plant to see how it's doing or add a new plant device.</p>
-</div>
-
-<!--New buttons will be appended to this div when a user enters a new plant device-->
-<div class="container">
-    <div class="row">
-        <div class="col s12 m6 offset-m3">
-            <div class="newPlantButtonsGoHere"></div>
-        </div>
+    <div class="plantsHead container center-align">
+        <h1>Your Plants</h1>
+        <p>Click a plant to see how it's doing or add a new plant device.</p>
     </div>
 
-</div>
-
-<!-- Modal Structure -->
-<div class="container center-align ">
-    <div id="addDevice" class="modal">
-        <div class="modal-content">
-            <h4>Add a Device</h4>
-            <p>Enter information below to add a new plant device.</p>
-        </div>
+    <!--New buttons will be appended to this div when a user enters a new plant device-->
+    <div class="container">
         <div class="row">
-            <form class="col s12 center-align">
-
-                <div class="row">
-                    <div class="input-field col offset-s3 s6 offset-m3 m6 offset-l4 l4">
-                        <input id="plantName" type="text" class="validate">
-                        <label for="plantName">Plant Name:</label>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="input-field col offset-s3 s6 offset-m3 m6 offset-l4 l4">
-                        <input id="deviceID" type="text" class="validate">
-                        <label for="deviceID">Device ID:</label>
-                    </div>
-                </div>
-            </form>
+            <div class="col s12 m6 offset-m3">
+                <div class="newPlantButtonsGoHere"></div>
+            </div>
         </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat"><button class="btn"
-                    id="addDeviceButton">Add</button></a>
-        </div>
+
     </div>
 
+    <!-- Modal Structure -->
+    <div class="container center-align ">
+        <div id="addDevice" class="modal">
+            <div class="modal-content">
+                <h4>Add a Device</h4>
+                <p>Enter information below to add a new plant device.</p>
+            </div>
+            <div class="row">
 
-    <!-- Modal Trigger -->
-    <button data-target="addDevice" class="btn modal-trigger">Add a New Plant Device</button>
-</div>
+                <form id="plantInput" class="col s12 center-align">
+
+                    <div class="row">
+                        <div class="input-field col offset-s3 s6 offset-m3 m6 offset-l4 l4">
+                            <input id="plantName" type="text" class="validate">
+                            <label for="plantName">Plant Name:</label>
+                        </div>
+
+                    </div>
+                </form>
+                <a class="btn" id="pickPhoto">Pick a Photo for your Plant!</a>
+                <div class="carouselGoesHere"></div>
+                <form id="deviceInput" class="col s12 center-align">
+                    <div class="row">
+                        <div class="input-field col offset-s3 s6 offset-m3 m6 offset-l4 l4">
+                            <select id="device">
+                                <option value="" disabled selected>Choose your option</option>
+                                <option value="SPDID00000000001">SPDID00000000001</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                            </select>
+                            <label>Device ID:</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat"><button class="btn"
+                        id="addDeviceButton">Add</button></a>
+            </div>
+        </div>
+
+
+        <!-- Modal Trigger -->
+        <button data-target="addDevice" class="btn modal-trigger">Add a New Plant Device</button>
+    </div>
 </div>
 
 <div class="grassDiv">
@@ -59,6 +68,206 @@
 
 <script>
     $('#addDevice').modal()
+    $("#deviceInput").hide()
+    $("#addDeviceButton").hide()
 
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
+
+    $(document).ready(function () {
+        $('.carousel').carousel();
+    });
+
+
+
+    $(document).ready(function () {
+
+        $("#pickPhoto").on("click", function () {
+            var textInputText = $("#plantName").val().trim()
+            $("#plantInput").hide()
+            $("#pickPhoto").hide()
+            buildCarousel(textInputText)
+
+        })
+
+        //   $('#plantName').keyup(function (event) {
+
+        //       var key = event.key
+
+        //       var textInputText = $(event.target).val()
+
+        //      if (textInputText.length > 3) {
+        //          $("carouselGoesHere").empty()
+        //          buildCarousel(textInputText)
+        //           $("carouselGoesHere").append("<h2>").text("Pick your image with a double click!")
+
+        //      }
+
+        //   })
+
+        function buildCarousel(textInputText) {
+            $(".carouselGoesHere").append("Pick your photo with a double click!")
+            // make a call using ajax to backend picture api thing I made
+            $.get("/api/images/" + textInputText).done(function (data) {
+                console.log("hi")
+                var imageArray = []
+                var json = JSON.parse(data);
+                console.log(json);
+                var loopThrough = json.images.value
+                console.log(loopThrough)
+                for (var i = 0; i < loopThrough.length; i++) {
+                    if (i >= 5) {
+                        break;
+                    } else {
+                        imageArray.push(loopThrough[i].thumbnailUrl)
+                    }
+
+                }
+                console.log(imageArray)
+
+
+
+                var carousel = $("<div>").addClass("carousel")
+                $(".carouselGoesHere").append(carousel)
+                // Then loop through the array of picturs
+
+                for (var i = 0; i < imageArray.length; i++) {
+                    var newA = $("<a>").addClass("carousel-item")
+                    var img = $("<img>").attr("id", "img" + i)
+                        .attr("src", imageArray[i])
+                        .attr("data-image", imageArray[i])
+                        .attr("data-name", textInputText)
+
+                    newA.append(img)
+                    carousel.append(newA)
+                    // end loop
+                }
+                $('.carousel').carousel();
+
+
+                $('.carousel-item').on("dblclick", function (event) {
+                    var selectedImage = $(event.target).attr("data-image")
+                    var selectedName = $(event.target).attr("data-name")
+                    //then your code here to save the selected image to a global object that is then used when the usere saves the new device
+                    console.log(selectedImage)
+                    $(".carouselGoesHere").empty()
+                    $(".carouselGoesHere").append("<h4>").text("Picture Selected!")
+                    $("#deviceInput").show()
+                    $("#addDeviceButton").show()
+
+
+                    //dummy code for appending image to plant Devices page until we pull info from database
+                    var newDiv1 = $("<div>");
+                    var newDiv2 = $("<div>").addClass("card horizontal");
+                    var newDiv3 = $("<div>")
+                        .addClass("card-image")
+                        .css("width", "120px");
+                    var newImage = $("<img>")
+                        .attr("id", "img2")
+                        .attr("src", selectedImage)
+                        .css("margin", "20px")
+                        .css("border-radius", "20%")
+                        .attr("height", "150px");
+
+                    newDiv3.append(newImage);
+
+                    var newDiv4 = $("<div>").addClass("card-stacked");
+                    var newDiv5 = $("<div>").addClass("card-content");
+                    var newH = $("<h3>").text(selectedName);
+
+                    newDiv5.append(newH);
+
+                    var newDiv6 = $("<div>").addClass("card-action");
+                    //need to figure out url to each plant for stats
+                    var newA = $("<a>")
+                        .attr("href", "")
+                        .text("Go to Stats")
+                        .attr("data-plantName", selectedName)
+
+                    var newA2 = $("<a>")
+                        .attr("href", "")
+                        .text("Delete this Device")
+                        .attr("data-plant", selectedName)
+
+                    newDiv6.append(newA, newA2);
+                    newDiv4.append(newDiv5, newDiv6);
+                    newDiv2.append(newDiv3, newDiv4);
+                    newDiv1.append(newDiv2);
+
+                    $(".newPlantButtonsGoHere").append(newDiv1);
+
+
+                    //on click of add device button plant name and device name and image url need to be sent to database
+                    $("#addDeviceButton").on("click", function () {
+                        var device = $("#device").val()
+                        var plant = selectedName
+                        var image = selectedImage
+
+                        console.log(`Device: ${device}\nPlant: ${plant}\nImage: ${image}`)
+
+                    })
+                })
+            })
+        }
+    })
+
+    //on click of add device we need to query database for plant name, device, and plant url to display cards to screen
+    $("#addDeviceButton").on("click", function () {
+
+        //this code will be for appending all plants of user to the page in card form
+        function displayAllPlants() {
+            $.get("/api/plants", function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    // NEED TO DEFINE data[i].deviceName, data[i].plantName, data[i].imageURL
+
+                    var newDiv1 = $("<div>");
+                    var newDiv2 = $("<div>").addClass("card horizontal");
+                    var newDiv3 = $("<div>")
+                        .addClass("card-image")
+                        .css("width", "120px");
+
+                    var newImage = $("<img>")
+                        .attr("id", "img" + i)
+                        .attr("src", data[i].imageURL)
+                        .css("margin", "20px")
+                        .css("border-radius", "20%")
+                        .attr("height", "150px");
+
+                    newDiv3.append(newImage);
+
+                    var newDiv4 = $("<div>").addClass("card-stacked");
+                    var newDiv5 = $("<div>").addClass("card-content");
+                    var newH = $("<h3>").text(data[i].plantName);
+
+                    newDiv5.append(newH);
+
+                    var newDiv6 = $("<div>").addClass("card-action");
+                    //need to figure out url to each plant for stats
+                    var newA = $("<a>")
+                        .attr("id", "aOne" + i)
+                        //need link to stats page
+                        .attr("href", "")
+                        .text("Go to Stats")
+                        .attr("data-plantName", data[i].plantName)
+                        .attr("data-plantDevice", data[i].deviceName);
+                    var newA2 = $("<a>")
+                        .attr("id", "aTwo" + i)
+                        //links to deleting device
+                        .attr("href", "")
+                        .text("Delete this Device")
+                        .attr("data-plant", data[i].plantName)
+                        .attr("data-device", data[i].deviceName);
+
+                    newDiv6.append(newA, newA2);
+                    newDiv4.append(newDiv5, newDiv6);
+                    newDiv2.append(newDiv3, newDiv4);
+                    newDiv1.append(newDiv2);
+
+                    $(".newPlantButtonsGoHere").append(newDiv1);
+
+                }
+            });
+        }
 
 </script>
