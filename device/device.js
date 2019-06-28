@@ -11,7 +11,7 @@ function J5(confg, cb) {
     this.config = confg
     this.deviceId = this.config[6].DEVICE_UID
     this.comPort = this.config[5].USB_PORT
-    this.serviceURL = 'http://' + this.config[0].REMOTE_SERVER + ':' + this.config[1].REMOTE_SERVER_PORT + "/" + this.config[7].DEVICE_ENDPOINT
+    this.serviceURL = 'http://' + this.config[0].REMOTE_SERVER + ':' + this.config[1].REMOTE_SERVER_PORT + "/api/live"
     this.interval = parseInt(this.config[4].TIME_INTERVAL)
     this.setLight = function(val) {
         this.lightVal = val
@@ -52,6 +52,7 @@ function J5(confg, cb) {
                 console.log('error:', error);
                 return
             }
+            console.log(response);
          })
     }
     this.drawTimer
@@ -61,9 +62,9 @@ function J5(confg, cb) {
         if (bord.tempVal === undefined || bord.soilVal === undefined || bord.lightVal === undefined || bord.relayState === undefined){
             return
         }
-        var data = {deviceId: bord.deviceId, temp: bord.tempVal, soil: bord.soilVal, light: bord.lightVal, relayState: bord.relayState }
+        var data = {DeviceId: bord.deviceId, temp: bord.tempVal, soil: bord.soilVal, light: bord.lightVal, relayState: bord.relayState }
         var client = request.createClient(bord.serviceURL);
-        client.post('/', data, function (error, response, body) {
+        client.post(bord.serviceURL, data, function (error, response, body) {
             if (error) {
                 console.log('error:', error);
                 return
