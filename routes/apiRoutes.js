@@ -1,5 +1,6 @@
 var db = require("../models");
 var request = require("request");
+const weather = require('../weather/weather.js')
 var Op = db.Sequelize.Op;
 var moment = require("moment");
 
@@ -146,21 +147,43 @@ module.exports = function(app) {
       });
   });
 
-  app.post("/api/live", function(req, res) {
-    if (!("DeviceId" in req.body)) {
-      console.log("bad request - DeviceId not included");
-      res.status(400).end();
-    } else {
-      db.LiveStats.create(req.body)
-        .then(function(data) {
-          res.json(data);
-        })
-        .catch(function(err) {
-          console.log(err);
-          res.status(400).end();
-        });
-    }
-  });
+ app.post("/api/live", function (req, res) {
+
+        var sensordata = {
+            moisture: req.body.soil,
+            light: req.body.light,
+            sensorTempFehr: req.body.temp,
+            DeviceId: req.body.DeviceId
+        }
+     console.log(sensordata)
+     weather(callback, "Orlando FL", "32792")
+
+        function callback(returnWeather) {
+            var current = returnWeather[0].current
+            sensordata.weatherTemp = current.temperature;
+            sensordata.precipIntensity = current.skycode;
+            sensordata.humidity = current.humidity;
+            sensordata.windSpeed = current.windspeed.split(" ")[0];
+
+            if (!("DeviceId" in sensordata)) {
+                console.log("bad request - DeviceId not included");
+                res.status(400).end();
+            } else {
+                db.LiveStats.create(sensordata)
+                    .then(function (data) {
+                        res.json(data);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                        res.status(400).end();
+                    });
+
+
+            }
+
+        }
+
+    });
 
   app.get("/api/hist", function(req, res) {
     var interval = req.body.interval;
