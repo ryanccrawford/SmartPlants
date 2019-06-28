@@ -1,7 +1,5 @@
 var db = require("../models");
 var request = require("request");
-var Op = db.Sequelize.Op;
-var moment = require("moment");
 
 module.exports = function(app) {
   // users functions
