@@ -154,6 +154,7 @@ module.exports = function(app) {
     }
 
     sqlQuery += " GROUP BY tTime ";
+    sqlQuery += " ORDER BY tTime ;";
 
     db.sequelize
       .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
@@ -230,6 +231,7 @@ module.exports = function(app) {
     }
 
     sqlQuery += " GROUP BY tTime ";
+    sqlQuery += " ORDER BY tTime ;";
 
     db.sequelize
       .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
