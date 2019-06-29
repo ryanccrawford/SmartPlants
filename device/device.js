@@ -83,7 +83,7 @@ function J5(confg, cb) {
                 console.log(response.statusCode)
                 console.log(body)
              if (body) {
-                    var reslt = json.parse(body)
+                    var reslt = JSON.parse(body)
                     if (reslt.zip) {
                         console.log("inside device ")
                         bord.zip = reslt.zip

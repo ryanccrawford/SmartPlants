@@ -11,7 +11,8 @@ module.exports = function (app) {
 
     app.post('/api/createSampledata', function (req, res) {
 
-        var sun = 0, temp = 80, hum = 0, rain = 0, wind = 2, season = 0, sunisnight = false, soil = 200, isWatering = false;
+        var sun = 0, temp = 80, hum = 0, rain = 0, wind = 2, season = 0, sunisnight = false, soil = 200, isWatering = false, timestamp = "", time;
+        var dt = new Date();
         for (var i = 0; i < 1000; i++) {
             if (sunisnight) {
                 sun--
@@ -35,22 +36,29 @@ module.exports = function (app) {
             if (temp > 90) {
                 soil = soil - sun + temp
             }
+           
+            
+            dt.setHours(dt.getHours() - 1);
+            timestamp = dt.toISOString().slice(0, 19).replace('T', ' ')
+            console.log(timestamp)
             if (sun < 6) {
                 isWatering = true;
             }
             
             var sensordata = {
-                moisture: Math.abs(soil),
-                light: Math.abs(sun * 100),
-                sensorTempFehr: temp,
-                DeviceId: 2,
+                timeStamp: timestamp,
+                moisture: parseInt(soil),
+                light: parseInt(sun * 100),
+                sensorTempFehr: parseInt(temp),
+                DeviceId: 1,
                 deviceIp: "72.65.21.3.1",
                 isWatering: isWatering,
-                weatherTemp : temp - 2,
-                precipIntensity :rain,
-                humidity : hum,
-                windSpeed : wind + 1
+                weatherTemp : parseInt(temp - 2),
+                precipIntensity : 20,
+                humidity: parseInt(hum),
+                windSpeed: 2
             }
+
             if (!("DeviceId" in sensordata)) {
                 console.log("bad request - DeviceId not included");
                 res.status(400).end();
