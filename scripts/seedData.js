@@ -4,7 +4,7 @@ var db = require("../models");
 
 db.sequelize
   .sync({
-    force: true
+    force: false
   })
   .then(function() {
     console.log("Creating a fake plant.");
