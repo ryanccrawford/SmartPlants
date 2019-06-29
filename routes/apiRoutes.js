@@ -65,6 +65,23 @@ module.exports = function(app) {
     }
   });
 
+  app.put("/api/device", function(req, res) {
+    if (!("DeviceId" in req.body)) {
+      console.log("bad request - DeviceId not included");
+      res.status(400).end();
+    } else {
+      db.Device.update(
+        {
+          isWatering: req.body.isWatering,
+          isDeviceConnected: req.body.isDeviceConnected
+        },
+        { where: { id: req.body.DeviceId } }
+      ).then(function(resp) {
+        res.json(resp);
+      });
+    }
+  });
+
   // plant functions
   app.get("/api/plants", function(req, res) {
     db.Plant.findAll({}).then(function(plants) {
@@ -92,9 +109,9 @@ module.exports = function(app) {
   });
 
   app.get("/api/live", function(req, res) {
-    var interval = req.body.interval;
-    var range = req.body.range;
-    var deviceId = req.body.deviceId;
+    var interval = req.query.interval;
+    var range = req.query.range;
+    var deviceId = req.query.deviceId;
 
     var sqlQuery = "SELECT ";
 
@@ -137,9 +154,10 @@ module.exports = function(app) {
     }
 
     sqlQuery += " GROUP BY tTime ";
+    sqlQuery += " ORDER BY tTime ;";
 
     db.sequelize
-      .query(sqlQuery, { type: Sequelize.QueryTypes.SELECT })
+      .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
       .then(function(data) {
         res.json(data);
       })
@@ -149,26 +167,12 @@ module.exports = function(app) {
       });
   });
 
-  app.post("/api/live", function(req, res) {
-    if (!("DeviceId" in req.body)) {
-      console.log("bad request - DeviceId not included");
-      res.status(400).end();
-    } else {
-      db.LiveStats.create(req.body)
-        .then(function(data) {
-          res.json(data);
-        })
-        .catch(function(err) {
-          console.log(err);
-          res.status(400).end();
-        });
-    }
-  });
-
   app.get("/api/hist", function(req, res) {
-    var interval = req.body.interval;
-    var range = req.body.range;
-    var deviceId = req.body.deviceId;
+    var interval = req.query.interval;
+    var range = req.query.range;
+    var deviceId = req.query.deviceId;
+
+    console.log(interval, range);
 
     var sqlQuery = "SELECT ";
 
@@ -211,9 +215,10 @@ module.exports = function(app) {
     }
 
     sqlQuery += " GROUP BY tTime ";
+    sqlQuery += " ORDER BY tTime ;";
 
     db.sequelize
-      .query(sqlQuery, { type: Sequelize.QueryTypes.SELECT })
+      .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
       .then(function(data) {
         res.json(data);
       })
