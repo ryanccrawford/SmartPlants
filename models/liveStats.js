@@ -13,7 +13,8 @@ module.exports = function(sequelize, DataTypes) {
       weatherTemp: DataTypes.FLOAT,
       precipIntensity: DataTypes.FLOAT,
       humidity: DataTypes.FLOAT,
-      windSpeed: DataTypes.FLOAT
+      windSpeed: DataTypes.FLOAT,
+      isWatering: DataTypes.BOOLEAN
     },
     {
       indexes: [
