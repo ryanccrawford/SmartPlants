@@ -10,7 +10,10 @@ module.exports = function(sequelize, DataTypes) {
       precipIntensity: DataTypes.FLOAT,
       humidity: DataTypes.FLOAT,
       windSpeed: DataTypes.FLOAT,
-      isWatering: DataTypes.BOOLEAN
+      isWatering: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      }
     },
     {
       indexes: [
