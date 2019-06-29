@@ -5,7 +5,7 @@ $(document).ready(function() {
     // Return new promise
     return new Promise(function(resolve, reject) {
       // Do async job
-      var interval;
+      //var interval;
       if (range === "day") {
         interval = "hour";
       } else if (range === "week") {
@@ -16,14 +16,15 @@ $(document).ready(function() {
         interval = "month";
       }
       //url = "/api/hist?range=";
-      url = "/api/hist?plantId=";
-      url += window.location.pathname.replace("/plant/", "");
+      url = "/api/hist?deviceId=";
+      url += window.location.pathname.replace("/devices/", "");
       url += "&range=";
       url += range;
-      url += "&interval=";
-      url += interval;
+      //url += "&interval=";
+      //url += interval;
       $.get(url)
         .done(function(data) {
+          console.log(data);
           resolve(data);
         })
         .fail(function(error) {
@@ -79,6 +80,13 @@ $(document).ready(function() {
             return datetime.format(formatString(range));
           }
         }
+      },
+      yaxis: {
+        labels: {
+          formatter: function(val) {
+            return parseInt(val);
+          }
+        }
       }
     });
     chart.updateSeries([
@@ -91,7 +99,7 @@ $(document).ready(function() {
   function getPropertyData(data, propertyName) {
     return data.map(function(dataPoint) {
       return {
-        x: dataPoint.timeStamp,
+        x: dataPoint.tTime,
         y: dataPoint[propertyName]
       };
     });
@@ -125,9 +133,21 @@ $(document).ready(function() {
   $("#propertySelect")
     .formSelect()
     .change(function() {
-      var range = $("rangeSelect").val();
+      var range = $("#rangeSelect").val();
       var property = $(this).val();
       var propertyData = getPropertyData(histData, property);
       updateChart(propertyData, range);
+    });
+
+  var range = $("#rangeSelect").val();
+  getDataFromRange(range)
+    .then(function(data) {
+      histData = data;
+      var property = $("#propertySelect").val();
+      var propertyData = getPropertyData(data, property);
+      updateChart(propertyData, range);
+    })
+    .catch(function(error) {
+      throw error;
     });
 });
