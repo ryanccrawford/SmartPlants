@@ -36,7 +36,12 @@ module.exports = function(app) {
   });
 
   app.get("/api/device/:id", function(req, res) {
-    db.Device.findOne({ where: { id: req.params.id } }).then(function(device) {
+    db.Device.findOne({
+      where: {
+        id: req.params.id
+      },
+      include: [db.LiveStats]
+    }).then(function(device) {
       res.json(device);
     });
   });

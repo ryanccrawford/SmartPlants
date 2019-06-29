@@ -35,15 +35,16 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       }
     });
-    Device.hasMany(models.LiveStats, {
+    Device.belongsTo(models.Plant, {
       foreignKey: {
         allowNull: false
       }
     });
+    Device.hasMany(models.LiveStats, {
+      onDelete: "cascade"
+    });
     Device.hasMany(models.HistStats, {
-      foreignKey: {
-        allowNull: false
-      }
+      onDelete: "cascade"
     });
   };
 

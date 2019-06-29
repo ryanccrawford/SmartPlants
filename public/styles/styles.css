@@ -123,6 +123,13 @@ body{
   width: 100%;
 }
 
+.entireInfo{
+  position: absolute;
+  z-index: 15;
+  top: 20px;
+  width: 100%;
+}
+
 .cloud1{
   color: white;
   position: absolute;
