@@ -5,29 +5,31 @@ $(document).ready(function() {
     // Return new promise
     return new Promise(function(resolve, reject) {
       // Do async job
-      var interval;
-      if (range === "day") {
-        interval = "hour";
-      } else if (range === "week") {
-        interval = "day";
-      } else if (range === "month") {
-        interval = "day";
-      } else if (range === "year") {
-        interval = "month";
-      }
       url = "/api/hist?deviceId=";
       url += window.location.pathname.replace("/devices/", "");
+      var interval;
       if (range) {
         url += "&range=";
         url += range;
-      }
-      if (interval) {
-        url += "&interval=";
-        url += interval;
+        if (range === "day") {
+          interval = "hour";
+        } else if (range === "week") {
+          interval = "day";
+        } else if (range === "month") {
+          interval = "day";
+        } else if (range === "year") {
+          interval = "month";
+        }
+        if (interval) {
+          url += "&interval=";
+          url += interval;
+        }
       }
       $.get(url)
         .done(function(data) {
-          console.log(data);
+          data = _.filter(data, function(v) {
+            return moment().diff(moment(v.tTime)) >= 0;
+          });
           resolve(data);
         })
         .fail(function(error) {
@@ -42,7 +44,7 @@ $(document).ready(function() {
     },
     series: [
       {
-        name: "values",
+        name: "Value",
         data: [0, 1]
       }
     ],
@@ -52,7 +54,10 @@ $(document).ready(function() {
       }
     },
     xaxis: {
-      categories: [0, 1]
+      categories: [0, 1],
+      title: {
+        text: "Time"
+      }
     }
   };
 
@@ -61,12 +66,12 @@ $(document).ready(function() {
 
   function formatString(range) {
     if (range === "day") {
-      return "MM/DD, h:mm a";
+      return "DD MMM h:mm a";
     } else if (range === "week") {
       return "DD MMM";
     } else if (range === "month") {
       return "DD MMM";
-    } else if (range === "year") {
+    } else {
       return "MMM YYYY";
     }
   }
@@ -78,8 +83,8 @@ $(document).ready(function() {
         labels: {
           rotate: -15,
           rotateAlways: true,
-          formatter: function(val, timestamp) {
-            var datetime = moment(new Date(timestamp));
+          formatter: function(val) {
+            var datetime = moment(val);
             return datetime.format(formatString(range));
           }
         }
@@ -102,7 +107,7 @@ $(document).ready(function() {
   function getPropertyData(data, propertyName) {
     return data.map(function(dataPoint) {
       return {
-        x: dataPoint.tTime,
+        x: moment(dataPoint.tTime, "YYYY-MM-DD hh").format("YYYY-MM-DD HH:MM"),
         y: dataPoint[propertyName]
       };
     });
