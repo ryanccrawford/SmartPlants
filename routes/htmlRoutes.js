@@ -1,4 +1,4 @@
-//var db = require("../models");
+var db = require("../models");
 
 module.exports = function(app) {
   // Load index page
@@ -16,7 +16,9 @@ module.exports = function(app) {
 
   // Render plant page - Will add ID later
   app.get("/plant/:id", function(req, res) {
-    res.render("plant", {});
+    db.Plant.findOne({ id: req.params.id }).then(function(plant) {
+      res.render("plant", { plant: plant });
+    });
   });
 
   app.get("/api/device", function(req, res) {
