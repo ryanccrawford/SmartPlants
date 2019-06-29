@@ -109,9 +109,9 @@ module.exports = function(app) {
   });
 
   app.get("/api/live", function(req, res) {
-    var interval = req.body.interval;
-    var range = req.body.range;
-    var deviceId = req.body.deviceId;
+    var interval = req.query.interval;
+    var range = req.query.range;
+    var deviceId = req.query.deviceId;
 
     var sqlQuery = "SELECT ";
 
@@ -183,9 +183,11 @@ module.exports = function(app) {
   });
 
   app.get("/api/hist", function(req, res) {
-    var interval = req.body.interval;
-    var range = req.body.range;
-    var deviceId = req.body.deviceId;
+    var interval = req.query.interval;
+    var range = req.query.range;
+    var deviceId = req.query.deviceId;
+
+    console.log(interval, range);
 
     var sqlQuery = "SELECT ";
 

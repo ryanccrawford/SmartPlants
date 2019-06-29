@@ -5,7 +5,7 @@ $(document).ready(function() {
     // Return new promise
     return new Promise(function(resolve, reject) {
       // Do async job
-      //var interval;
+      var interval;
       if (range === "day") {
         interval = "hour";
       } else if (range === "week") {
@@ -15,13 +15,16 @@ $(document).ready(function() {
       } else if (range === "year") {
         interval = "month";
       }
-      //url = "/api/hist?range=";
       url = "/api/hist?deviceId=";
       url += window.location.pathname.replace("/devices/", "");
-      url += "&range=";
-      url += range;
-      //url += "&interval=";
-      //url += interval;
+      if (range) {
+        url += "&range=";
+        url += range;
+      }
+      if (interval) {
+        url += "&interval=";
+        url += interval;
+      }
       $.get(url)
         .done(function(data) {
           console.log(data);
@@ -118,6 +121,9 @@ $(document).ready(function() {
     .formSelect()
     .change(function() {
       var range = $(this).val();
+      if (range === "all") {
+        range = undefined;
+      }
       getDataFromRange(range)
         .then(function(data) {
           histData = data;
@@ -134,12 +140,18 @@ $(document).ready(function() {
     .formSelect()
     .change(function() {
       var range = $("#rangeSelect").val();
+      if (range === "all") {
+        range = undefined;
+      }
       var property = $(this).val();
       var propertyData = getPropertyData(histData, property);
       updateChart(propertyData, range);
     });
 
   var range = $("#rangeSelect").val();
+  if (range === "all") {
+    range = undefined;
+  }
   getDataFromRange(range)
     .then(function(data) {
       histData = data;
