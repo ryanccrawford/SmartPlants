@@ -1,20 +1,25 @@
-$("#loginButton").on("click", function() {
-  var user = {
-    userName: $("#user")
-      .val()
-      .trim(),
-    password: $("#password")
-      .val()
-      .trim()
+$("#loginButton").on("click", function(event) {
+  event.preventDefault();
+  var userName = $("#user")
+    .val()
+    .trim();
+  var password = $("#password")
+    .val()
+    .trim();
+  var data = {
+    userName: userName,
+    password: password
   };
 
-  $.ajax("/api/users", {
-    type: "POST",
-    data: user
-  }).then(function(data) {
-    var query = "/api/user/" + data.userName;
-    $.get(query, function(data) {
-      userID = data.id;
+  $.get("/api/user/" + userName)
+    .then(function(user) {
+      // redirect for demo
+      window.location.href = "/users/" + user.userName;
+    })
+    .catch(function() {
+      $.post("/api/users", data).then(function(newUser) {
+        // redirect for demo
+        window.location.href = "/users/" + newUser.userName;
+      });
     });
-  });
 });
