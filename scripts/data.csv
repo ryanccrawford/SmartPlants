@@ -1,4 +1,4 @@
-createdAt,moisture,light,sensorTempFehr,weatherTemp,precipIntensity,humidity,windSpeed
+timeStamp,moisture,light,sensorTempFehr,weatherTemp,precipIntensity,humidity,windSpeed
 2019-06-28 11:00:55,516,1000,79.9,76,32,91,0
 2019-06-28 11:12:43,516,996,79.9,76,32,91,0
 2019-06-28 11:12:43,516,996,79.9,76,32,91,0
