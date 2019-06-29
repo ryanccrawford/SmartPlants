@@ -15,7 +15,12 @@ module.exports = function(app) {
       where: {
         userName: req.params.username
       },
-      include: [db.Device]
+      include: [
+        {
+          model: db.Device,
+          include: [db.Plant]
+        }
+      ]
     }).then(function(user) {
       res.render("user", { user: user });
     });
