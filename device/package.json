@@ -1,0 +1,20 @@
+{
+  "name": "device-usbbridge",
+  "version": "0.0.0",
+  "description": "deviceUSBBridge",
+  "main": "server.js",
+  "author": "",
+  "dependencies": {
+    "cron": "^1.7.1",
+    "express": "^4.17.1",
+    "file-system": "^2.2.2",
+    "johnny-five": "^1.1.0",
+    "request": "^2.88.0",
+    "request-json": "^0.6.4"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "devDependencies": {},
+  "license": "ISC"
+}

@@ -1,2 +1,6 @@
-# project-2
-project-2
+# Welcom to SmartPlants
+- Where plants are so smart you don't have to be
+
+
+
+

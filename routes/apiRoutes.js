@@ -167,22 +167,6 @@ module.exports = function(app) {
       });
   });
 
-  app.post("/api/live", function(req, res) {
-    if (!("DeviceId" in req.body)) {
-      console.log("bad request - DeviceId not included");
-      res.status(400).end();
-    } else {
-      db.LiveStats.create(req.body)
-        .then(function(data) {
-          res.json(data);
-        })
-        .catch(function(err) {
-          console.log(err);
-          res.status(400).end();
-        });
-    }
-  });
-
   app.get("/api/hist", function(req, res) {
     var interval = req.query.interval;
     var range = req.query.range;
