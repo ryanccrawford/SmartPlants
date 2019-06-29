@@ -39,7 +39,10 @@ db.sequelize
                 obj.DeviceId = dbDevice.id;
               });
               db.LiveStats.bulkCreate(jsonObj).then(function() {
-                console.log("Completed script.");
+                console.log("Completed live data.");
+              });
+              db.HistStats.bulkCreate(jsonObj).then(function() {
+                console.log("Completed hist data.");
               });
             });
         });
