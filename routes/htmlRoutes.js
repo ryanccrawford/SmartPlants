@@ -26,7 +26,6 @@ module.exports = function(app) {
     });
   });
 
-  // Render plant page - Will add ID later
   app.get("/devices/:id", function(req, res) {
     db.Device.findOne({
       where: {

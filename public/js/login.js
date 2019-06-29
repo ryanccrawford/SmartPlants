@@ -11,7 +11,7 @@ $("#loginButton").on("click", function(event) {
     password: password
   };
 
-  $.get("/api/user/" + userName)
+  $.get("/api/users/" + userName)
     .then(function(user) {
       // redirect for demo
       window.location.href = "/users/" + user.userName;
