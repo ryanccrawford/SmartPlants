@@ -36,14 +36,10 @@ module.exports = function(sequelize, DataTypes) {
       }
     });
     Device.hasMany(models.LiveStats, {
-      foreignKey: {
-        allowNull: false
-      }
+      onDelete: "cascade"
     });
     Device.hasMany(models.HistStats, {
-      foreignKey: {
-        allowNull: false
-      }
+      onDelete: "cascade"
     });
   };
 

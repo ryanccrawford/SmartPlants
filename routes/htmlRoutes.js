@@ -17,11 +17,13 @@ module.exports = function(app) {
   // Render plant page - Will add ID later
   app.get("/plant/:id", function(req, res) {
     db.Device.findOne({
-      id: req.params.id,
+      where: {
+        id: req.params.id
+      },
       include: [db.LiveStats]
-    }).then(function(plant) {
-      console.log(plant);
-      res.render("plant", { plant: plant });
+    }).then(function(device) {
+      console.log("Device: " + device.LiveStats);
+      res.render("plant", { device: device });
     });
   });
 
