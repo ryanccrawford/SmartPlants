@@ -1,10 +1,7 @@
-// {deviceId: bord.deviceId, temp: bord.tempVal, soil: bord.soilVal, light: bord.lightVal, relayState: bord.relayState }
-//id, timeStamp, moisture, light, sensorTempFehr, weatherTemp, precipIntensity, humidity, windSpeed, createdAt, updatedAt, DeviceId
 const weather = require('../weather/weather.js')
 const apiKey = '1234f1b93e4b78224a19eedee0272692';
 const GoogleMapsAPIKEY = 'AIzaSyBA7nLOnU93fceQSVblB8a88ON24d3rpv0';
 const request = require("request");
-const requestJSON = require("request-json");
 const endpoint = 'http://api.ipstack.com';
 const db = require("../models");
 var zip
@@ -76,7 +73,8 @@ module.exports = function (app) {
 
 
     })
-	app.post("/api/live/", function (req, res) {
+
+    app.post("/api/live/", function (req, res) {
        var sensordata = {
             moisture: req.body.soil,
             light: req.body.light,
@@ -86,17 +84,19 @@ module.exports = function (app) {
             isWatering: req.body.isWatering
         }
         function callback(returnWeather) {
-            console.log(sensordata)
-            console.log(returnWeather)
-            sensordata.weatherTemp = returnWeather[0].current.temperature;
-            sensordata.precipIntensity = returnWeather[0].current.skycode;
-            sensordata.humidity = returnWeather[0].current.humidity;
-            sensordata.windSpeed = returnWeather[0].current.windspeed.split(" ")[0];
-
+            
             if (!("DeviceId" in sensordata)) {
                 console.log("bad request - DeviceId not included");
                 res.status(400).end();
             } else {
+                console.log(sensordata)
+                console.log(returnWeather)
+
+                sensordata.weatherTemp = typeof returnWeather[0].current.temperature !== 'undefined' ? returnWeather[0].current.temperature : 0;
+                sensordata.precipIntensity = typeof returnWeather[0].current.skycode !== 'undefined' ? returnWeather[0].current.skycode : 0;
+                sensordata.humidity = typeof returnWeather[0].current.humidity !== 'undefined' ? returnWeather[0].current.humidity : 0;
+                sensordata.windSpeed = typeof returnWeather[0].current.windspeed.split(" ")[0] !== 'undefined' ? returnWeather[0].current.windspeed.split(" ")[0] : 0;
+
                 db.LiveStats.create(sensordata)
                     .then(function (data) {
                         res.json(data);
@@ -108,12 +108,9 @@ module.exports = function (app) {
             }
         }
 		
-        console.log(sensordata)
         if (!req.body.zip && !zip) {
             var uri = `/api/getzipfromip/${sensordata.deviceIP}`;
             console.log(uri);
-
-
             request("http://localhost:3000" + uri, function (error, response, body) {
                 if (error) {
                     console.log(error)
@@ -129,7 +126,6 @@ module.exports = function (app) {
 
             });
         } else {
-            console.log("IN NONE GEOCODE ZIP GETTING WEATHER " + zip || req.body.zip)
             weather(callback, zip);
         }
         
@@ -257,6 +253,7 @@ module.exports = function (app) {
 	});
 
 	function alldone(zip) {
-		console.log(zip)
+        console.log(zip)
+        return
 	}
 }
