@@ -5,7 +5,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       validate: { len: [4, 16] }
     },
-    deviceIP: {
+    deviceIp: {
       type: DataTypes.STRING,
       validate: { isIP: true }
     },
