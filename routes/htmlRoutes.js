@@ -16,7 +16,11 @@ module.exports = function(app) {
 
   // Render plant page - Will add ID later
   app.get("/plant/:id", function(req, res) {
-    db.Plant.findOne({ id: req.params.id }).then(function(plant) {
+    db.Device.findOne({
+      id: req.params.id,
+      include: [db.LiveStats]
+    }).then(function(plant) {
+      console.log(plant);
       res.render("plant", { plant: plant });
     });
   });
