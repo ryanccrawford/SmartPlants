@@ -10,8 +10,15 @@ module.exports = function(app) {
     res.render("login");
   });
 
-  app.get("/plantDevices", function(req, res) {
-    res.render("plantDevices");
+  app.get("/users/:username", function(req, res) {
+    db.User.findOne({
+      where: {
+        userName: req.params.username
+      },
+      include: [db.Device]
+    }).then(function(user) {
+      res.render("user", { user: user });
+    });
   });
 
   // Render plant page - Will add ID later
