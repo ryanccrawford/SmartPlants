@@ -5,13 +5,17 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       validate: { len: [4, 16] }
     },
+    deviceIP: {
+      type: DataTypes.STRING,
+      validate: { isIP: true }
+    },
     isDeviceConnected: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    deviceIP: {
-      type: DataTypes.STRING,
-      validate: { isIP: true }
+    isWatering: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     UserId: {
       type: DataTypes.INTEGER,
