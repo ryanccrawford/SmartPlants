@@ -7,35 +7,42 @@ db.sequelize
     force: true
   })
   .then(function() {
-    console.log("Creating fake user.");
-    db.User.create({
-      userName: "user",
-      email: "mail@mail.com",
-      password: "password"
-    }).then(function(dbUser) {
-      console.log("Creating fake device.");
-      db.Device.create({
-        deviceName: "Test Device",
-        UserId: dbUser.id,
-        PlantId: 1
-      }).then(function(dbDevice) {
-        console.log("Creating fake live data.");
-        csv({
-          colParser: {
-            createdAt: function(item) {
-              return new Date(item);
+    console.log("Creating a fake plant.");
+    db.Plant.create({
+      plantName: "Rose",
+      image:
+        "https://tse1.mm.bing.net/th?id=OIP.v_Y2bwYk0jGZpW8FU_wW1QHaHa&pid=Api"
+    }).then(function(dbPlant) {
+      console.log("Creating fake user.");
+      db.User.create({
+        userName: "user",
+        email: "mail@mail.com",
+        password: "password"
+      }).then(function(dbUser) {
+        console.log("Creating fake device.");
+        db.Device.create({
+          deviceName: "Test Device",
+          UserId: dbUser.id,
+          PlantId: dbPlant.id
+        }).then(function(dbDevice) {
+          console.log("Creating fake live data.");
+          csv({
+            colParser: {
+              createdAt: function(item) {
+                return new Date(item);
+              }
             }
-          }
-        })
-          .fromFile("./scripts/data.csv")
-          .then(function(jsonObj) {
-            jsonObj.map(function(obj) {
-              obj.DeviceId = dbDevice.id;
+          })
+            .fromFile("./scripts/data.csv")
+            .then(function(jsonObj) {
+              jsonObj.map(function(obj) {
+                obj.DeviceId = dbDevice.id;
+              });
+              db.LiveStats.bulkCreate(jsonObj).then(function() {
+                console.log("Completed script.");
+              });
             });
-            db.LiveStats.bulkCreate(jsonObj).then(function() {
-              console.log("Completed script.");
-            });
-          });
+        });
       });
     });
   });
