@@ -111,7 +111,10 @@ $(document).ready(function() {
   $.fn.dataTable.ext.classes.sPageButton = "waves-effect waves-light btn";
   $("#dataTable").DataTable({
     searching: false,
-    order: [[0, "desc"]]
+    order: [[0, "desc"]],
+    initComplete: function() {
+      $("#dataTable").show();
+    }
   });
 
   var $tabs = $(".tabs");
