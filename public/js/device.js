@@ -15,15 +15,19 @@ $(document).ready(function() {
       } else if (range === "year") {
         interval = "month";
       }
-      //url = "/api/hist?range=";
-      url = "/api/hist?plantId=";
-      url += window.location.pathname.replace("/plant/", "");
-      url += "&range=";
-      url += range;
-      url += "&interval=";
-      url += interval;
+      url = "/api/hist?deviceId=";
+      url += window.location.pathname.replace("/devices/", "");
+      if (range) {
+        url += "&range=";
+        url += range;
+      }
+      if (interval) {
+        url += "&interval=";
+        url += interval;
+      }
       $.get(url)
         .done(function(data) {
+          console.log(data);
           resolve(data);
         })
         .fail(function(error) {
@@ -79,6 +83,13 @@ $(document).ready(function() {
             return datetime.format(formatString(range));
           }
         }
+      },
+      yaxis: {
+        labels: {
+          formatter: function(val) {
+            return parseInt(val);
+          }
+        }
       }
     });
     chart.updateSeries([
@@ -91,7 +102,7 @@ $(document).ready(function() {
   function getPropertyData(data, propertyName) {
     return data.map(function(dataPoint) {
       return {
-        x: dataPoint.timeStamp,
+        x: dataPoint.tTime,
         y: dataPoint[propertyName]
       };
     });
@@ -110,6 +121,9 @@ $(document).ready(function() {
     .formSelect()
     .change(function() {
       var range = $(this).val();
+      if (range === "all") {
+        range = undefined;
+      }
       getDataFromRange(range)
         .then(function(data) {
           histData = data;
@@ -125,9 +139,27 @@ $(document).ready(function() {
   $("#propertySelect")
     .formSelect()
     .change(function() {
-      var range = $("rangeSelect").val();
+      var range = $("#rangeSelect").val();
+      if (range === "all") {
+        range = undefined;
+      }
       var property = $(this).val();
       var propertyData = getPropertyData(histData, property);
       updateChart(propertyData, range);
+    });
+
+  var range = $("#rangeSelect").val();
+  if (range === "all") {
+    range = undefined;
+  }
+  getDataFromRange(range)
+    .then(function(data) {
+      histData = data;
+      var property = $("#propertySelect").val();
+      var propertyData = getPropertyData(data, property);
+      updateChart(propertyData, range);
+    })
+    .catch(function(error) {
+      throw error;
     });
 });
