@@ -81,29 +81,29 @@ function J5(confg, cb) {
             if (response && response.statusCode) {
 
                 console.log(response.statusCode)
-
-         //       if (body) {
-         //           var reslt = JSON.parse(body)
-         //           if (reslt.zip) {
-         //               console.LOG("inside device ")
-         //               bord.zip = reslt.zip
-         //           }
-         //           var commands = reslt
-         //           if (commands === undefined) {
-         //               console.log("nothing to do")
-         //               return
-         //           }
-         //           console.log(commands)
-         //            if (commands.relay) {
-         //                bord.relay(commands.relay)
-         //            }
-         //            if (commands.led) {
-         //                bord.led(commands.led)
-         //            }
-         //            if (commands.lcd) {
-         //                bord.lcd(commands.lcd)
-         //            }
-         //    }
+                console.log(body)
+             if (body) {
+                    var reslt = json.parse(body)
+                    if (reslt.zip) {
+                        console.log("inside device ")
+                        bord.zip = reslt.zip
+                    }
+                    var commands = reslt
+                    if (commands === undefined) {
+                        console.log("nothing to do")
+                        return
+                    }
+                    console.log(commands)
+                     if (commands.relay) {
+                         bord.relay(commands.relay)
+                     }
+                     if (commands.led) {
+                         bord.led(commands.led)
+                     }
+                     if (commands.lcd) {
+                         bord.lcd(commands.lcd)
+                     }
+             }
         }
         }
         )

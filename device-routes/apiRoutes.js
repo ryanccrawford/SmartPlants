@@ -1,6 +1,7 @@
+require("dotenv").config();
 const weather = require('../weather/weather.js')
-const apiKey = '1234f1b93e4b78224a19eedee0272692';
-const GoogleMapsAPIKEY = 'AIzaSyBA7nLOnU93fceQSVblB8a88ON24d3rpv0';
+const apiKey = process.env.APIKEY;
+const GoogleMapsAPIKEY = process.env.GOOGLE_API_KEY;
 const request = require("request");
 const endpoint = 'http://api.ipstack.com';
 const db = require("../models");
