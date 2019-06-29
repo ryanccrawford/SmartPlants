@@ -15,14 +15,21 @@ module.exports = function(app) {
   });
 
   // Render plant page - Will add ID later
-  app.get("/plant/:id", function(req, res) {
-    db.Plant.findOne({ id: req.params.id }).then(function(plant) {
-      res.render("plant", { plant: plant });
+  app.get("/devices/:id", function(req, res) {
+    db.Device.findOne({
+      where: {
+        id: req.params.id
+      },
+      include: [db.LiveStats]
+    }).then(function(device) {
+      res.render("device", { device: device });
     });
   });
 
+  /*
   app.get("/api/device", function(req, res) {
     res.send(req.body);
   });
+  */
   // Render 404 page for any unmatched routes
 };
