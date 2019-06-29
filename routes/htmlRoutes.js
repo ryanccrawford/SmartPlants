@@ -27,7 +27,7 @@ module.exports = function(app) {
       where: {
         id: req.params.id
       },
-      include: [db.LiveStats]
+      include: [db.Plant, db.User, db.LiveStats]
     }).then(function(device) {
       res.render("device", { device: device });
     });
