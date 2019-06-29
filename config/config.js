@@ -13,10 +13,10 @@ module.exports = {
     }
   },
   test: {
-    username: process.env.MYSQL_USERNAME,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_TEST_DATABASE,
-    host: process.env.MYSQL_HOST,
+    username: process.env.MYSQL_USERNAME || "root",
+    password: process.env.MYSQL_PASSWORD || null,
+    database: process.env.MYSQL_TEST_DATABASE || "testdb",
+    host: process.env.MYSQL_HOST || "localhost",
     dialect: "mysql",
     logging: false
   },
