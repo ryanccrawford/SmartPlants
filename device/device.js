@@ -10,7 +10,7 @@ function J5(confg, cb) {
     this.relayState = "closed"
     this.isWatering = false
     this.zip = ""
-    this.deviceIP = ""
+    this.deviceIp = ""
     this.config = confg
     this.deviceId = this.config[6].DEVICE_UID
     this.comPort = this.config[5].USB_PORT
@@ -35,7 +35,7 @@ function J5(confg, cb) {
         console.log("Temp:" + bord.tempVal)
         console.log("Relay: " + bord.relayState)
         console.log("Is Watering: " + bord.isWatering)
-        console.log("Device Public IP: " + bord.deviceIP)
+        console.log("Device Public IP: " + bord.deviceIp)
     }
     this.relay = function (state) {
 
@@ -68,7 +68,7 @@ function J5(confg, cb) {
             return
         }
         console.log(bord)
-        var data = {DeviceId: bord.deviceId, temp: bord.tempVal, soil: bord.soilVal, light: bord.lightVal, isWatering: bord.isWatering, deviceIP: bord.deviceIP }
+        var data = {DeviceId: bord.deviceId, temp: bord.tempVal, soil: bord.soilVal, light: bord.lightVal, isWatering: bord.isWatering, deviceIp: bord.deviceIp }
         if (bord.zip) {
             data.zip = bord.zip
         }
@@ -112,7 +112,7 @@ function J5(confg, cb) {
     board = new five.Board({ port: this.comPort, repl: false, })
    
     publicIP.v4().then(function (ipval) {
-        bord.deviceIP = ipval;
+        bord.deviceIp = ipval;
     });
    
 

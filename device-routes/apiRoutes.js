@@ -44,7 +44,7 @@ module.exports = function (app) {
                 light: Math.abs(sun * 100),
                 sensorTempFehr: temp,
                 DeviceId: 2,
-                deviceIP: "72.65.21.3.1",
+                deviceIp: "72.65.21.3.1",
                 isWatering: isWatering,
                 weatherTemp : temp - 2,
                 precipIntensity :rain,
@@ -81,7 +81,7 @@ module.exports = function (app) {
             light: req.body.light,
             sensorTempFehr: req.body.temp,
             DeviceId: req.body.deviceId,
-            deviceIP: req.body.deviceIP,
+            deviceIp: req.body.deviceIp,
             isWatering: req.body.isWatering
         }
         function callback(returnWeather) {
@@ -110,7 +110,7 @@ module.exports = function (app) {
         }
 		
         if (!req.body.zip && !zip) {
-            var uri = `/api/getzipfromip/${sensordata.deviceIP}`;
+            var uri = `/api/getzipfromip/${sensordata.deviceIp}`;
             console.log(uri);
             request("http://localhost:3000" + uri, function (error, response, body) {
                 if (error) {

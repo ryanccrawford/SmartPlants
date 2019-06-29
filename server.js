@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === "test") {
 }
 
 // Starting the server, syncing our models ------------------------------------/
-// db.sequelize.sync(syncOptions).then(function() {
+//db.sequelize.sync(syncOptions).then(function() {
 
 // -- changed to never force database sync --
 db.sequelize.sync({ force: false }).then(function() {
