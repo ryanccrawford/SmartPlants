@@ -10,25 +10,38 @@ module.exports = function(app) {
     res.render("login");
   });
 
-  app.get("/plantDevices", function(req, res) {
-    res.render("plantDevices");
+  app.get("/users/:username", function(req, res) {
+    db.User.findOne({
+      where: {
+        userName: req.params.username
+      },
+      include: [
+        {
+          model: db.Device,
+          include: [db.Plant]
+        }
+      ]
+    }).then(function(user) {
+      res.render("user", { user: user });
+    });
   });
 
   // Render plant page - Will add ID later
-  app.get("/plant/:id", function(req, res) {
+  app.get("/devices/:id", function(req, res) {
     db.Device.findOne({
       where: {
         id: req.params.id
       },
-      include: [db.LiveStats]
+      include: [db.Plant, db.User, db.LiveStats]
     }).then(function(device) {
-      console.log("Device: " + device.LiveStats);
-      res.render("plant", { device: device });
+      res.render("device", { device: device });
     });
   });
 
+  /*
   app.get("/api/device", function(req, res) {
     res.send(req.body);
   });
+  */
   // Render 404 page for any unmatched routes
 };
