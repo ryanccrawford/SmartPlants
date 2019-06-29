@@ -35,6 +35,11 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       }
     });
+    Device.belongsTo(models.Plant, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
     Device.hasMany(models.LiveStats, {
       onDelete: "cascade"
     });
