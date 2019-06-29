@@ -1,5 +1,11 @@
 <div class="skyDim"></div>
 <div class="sky"></div>
+<i class="material-icons cloud1 md-48">cloud</i>
+<i class="material-icons cloud2 md-48">cloud</i>
+<i class="material-icons cloud3 md-48">cloud</i>
+<div class="loginSun "></div>
+
+<img src="/images/happyPlant.png" height="300px" class="landingPic">
 <div class="entireDevices">
     <div class="plantsHead container center-align">
         <h1>Your Plants</h1>
@@ -7,7 +13,7 @@
     </div>
 
     <!--New buttons will be appended to this div when a user enters a new plant device-->
-    <div class="container">
+    <div class="container cardsDiv">
         <div class="row">
             <div class="col s12 m6 offset-m3">
                 <div class="center-align">
@@ -15,7 +21,7 @@
                 {{> user/device-block}}
                 {{/each}}
                 </div>
-                <div class="newPlantButtonsGoHere"></div>
+                <div id="cardsStyle" class="newPlantButtonsGoHere"></div>
             </div>
         </div>
 
@@ -40,7 +46,7 @@
 
                     </div>
                 </form>
-                <a class="btn" id="pickPhoto">Pick a Photo for your Plant!</a>
+                <a class="btn" id="pickPhoto">Next</a>
                 <div class="carouselGoesHere"></div>
                 <form id="deviceInput" class="col s12 center-align">
                     <div class="row">
@@ -48,8 +54,6 @@
                             <select id="device">
                                 <option value="" disabled selected>Choose your option</option>
                                 <option value="SPDID00000000001">SPDID00000000001</option>
-                                <option value="2">Option 2</option>
-                                <option value="3">Option 3</option>
                             </select>
                             <label>Device ID:</label>
                         </div>
@@ -64,11 +68,11 @@
 
 
         <!-- Modal Trigger -->
-        <button data-target="addDevice" class="btn modal-trigger">Add a New Plant Device</button>
+        <button data-target="addDevice" class="btn deviceButton modal-trigger">Add a New Plant Device</button>
     </div>
 </div>
 
-<div class="grassDiv">
+<div id="userGrass" class="grassDiv">
 </div>
 
 <script>
@@ -157,17 +161,19 @@
                     //then your code here to save the selected image to a global object that is then used when the usere saves the new device
                     console.log(selectedImage)
                     $(".carouselGoesHere").empty()
-                    $(".carouselGoesHere").append("<h4>").text("Picture Selected!")
+                    $(".carouselGoesHere").append("<h4>").text("Picture selected, now choose your device.")
                     $("#deviceInput").show()
+                    $("#deviceInput").css("margin-top","50px")
                     $("#addDeviceButton").show()
 
 
                     //dummy code for appending image to plant Devices page until we pull info from database
                     var newDiv1 = $("<div>");
-                    var newDiv2 = $("<div>").addClass("card horizontal");
+                    var newDiv2 = $("<div>").addClass("card horizontal left-align valign-wrapper");
                     var newDiv3 = $("<div>")
                         .addClass("card-image")
-                        .css("width", "120px");
+                        .css("width", "120px")
+                        
                     var newImage = $("<img>")
                         .attr("id", "img2")
                         .attr("src", selectedImage)
@@ -179,7 +185,8 @@
 
                     var newDiv4 = $("<div>").addClass("card-stacked");
                     var newDiv5 = $("<div>").addClass("card-content");
-                    var newH = $("<h3>").text(selectedName);
+                    var newH = $("<h3>").text(selectedName)
+                                        .attr("id","cardName");
 
                     newDiv5.append(newH);
 
@@ -192,7 +199,7 @@
 
                     var newA2 = $("<a>")
                         .attr("href", "")
-                        .text("Delete this Device")
+                        .text("Delete this device")
                         .attr("data-plant", selectedName)
 
                     newDiv6.append(newA, newA2);
@@ -217,62 +224,5 @@
         }
     })
 
-    //on click of add device we need to query database for plant name, device, and plant url to display cards to screen
-    $("#addDeviceButton").on("click", function () {
-
-        //this code will be for appending all plants of user to the page in card form
-        function displayAllPlants() {
-            $.get("/api/plants", function (data) {
-                for (var i = 0; i < data.length; i++) {
-                    // NEED TO DEFINE data[i].deviceName, data[i].plantName, data[i].imageURL
-
-                    var newDiv1 = $("<div>");
-                    var newDiv2 = $("<div>").addClass("card horizontal");
-                    var newDiv3 = $("<div>")
-                        .addClass("card-image")
-                        .css("width", "120px");
-
-                    var newImage = $("<img>")
-                        .attr("id", "img" + i)
-                        .attr("src", data[i].imageURL)
-                        .css("margin", "20px")
-                        .css("border-radius", "20%")
-                        .attr("height", "150px");
-
-                    newDiv3.append(newImage);
-
-                    var newDiv4 = $("<div>").addClass("card-stacked");
-                    var newDiv5 = $("<div>").addClass("card-content");
-                    var newH = $("<h3>").text(data[i].plantName);
-
-                    newDiv5.append(newH);
-
-                    var newDiv6 = $("<div>").addClass("card-action");
-                    //need to figure out url to each plant for stats
-                    var newA = $("<a>")
-                        .attr("id", "aOne" + i)
-                        //need link to stats page
-                        .attr("href", "")
-                        .text("Go to Stats")
-                        .attr("data-plantName", data[i].plantName)
-                        .attr("data-plantDevice", data[i].deviceName);
-                    var newA2 = $("<a>")
-                        .attr("id", "aTwo" + i)
-                        //links to deleting device
-                        .attr("href", "")
-                        .text("Delete this Device")
-                        .attr("data-plant", data[i].plantName)
-                        .attr("data-device", data[i].deviceName);
-
-                    newDiv6.append(newA, newA2);
-                    newDiv4.append(newDiv5, newDiv6);
-                    newDiv2.append(newDiv3, newDiv4);
-                    newDiv1.append(newDiv2);
-
-                    $(".newPlantButtonsGoHere").append(newDiv1);
-
-                }
-            });
-        }
-    })
+   
 </script>
