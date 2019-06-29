@@ -60,6 +60,23 @@ module.exports = function(app) {
     }
   });
 
+  app.put("/api/device", function(req, res) {
+    if (!("DeviceId" in req.body)) {
+      console.log("bad request - DeviceId not included");
+      res.status(400).end();
+    } else {
+      db.Device.update(
+        {
+          isWatering: req.body.isWatering,
+          isDeviceConnected: req.body.isDeviceConnected
+        },
+        { where: { id: req.body.DeviceId } }
+      ).then(function(resp) {
+        res.json(resp);
+      });
+    }
+  });
+
   // plant functions
   app.get("/api/plants", function(req, res) {
     db.Plant.findAll({}).then(function(plants) {
