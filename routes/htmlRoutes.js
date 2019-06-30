@@ -33,7 +33,10 @@ module.exports = function(app) {
       },
       include: [db.Plant, db.User, db.LiveStats]
     }).then(function(device) {
-      res.render("device", { device: device });
+      var currentStats = device.LiveStats.reduce(function(prev, curr) {
+        return prev.timeStamp > curr.timeStamp ? prev : curr;
+      }); //returns object
+      res.render("device", { device: device, currentStats: currentStats });
     });
   });
 
