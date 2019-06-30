@@ -22,10 +22,14 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-tint large-status-icon green-text"></i>
+                    <i class="fas fa-tint large-status-icon {{#if currentStats.moisture}}green-text{{else}}yellow-text text-darken-2{{/if}}"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title green-text">GOOD</span>
+                    {{#if currentStats.moisture}}
+                      <span class="card-title green-text">GOOD ({{currentStats.moisture}}%)</span>
+                    {{else}}
+                      <span class="card-title yellow-text text-darken-2">LOW (0%)</span>
+                    {{/if}}
                     <p>Moisture</p>
                   </div>
                 </div>
@@ -37,10 +41,14 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-sun large-status-icon green-text"></i>
+                    <i class="fas fa-sun large-status-icon {{#if currentStats.light}}green-text{{else}}yellow-text text-darken-2{{/if}}"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title green-text">GOOD</span>
+                    {{#if currentStats.light}}
+                      <span class="card-title green-text">GOOD ({{currentStats.light}} lm)</span>
+                    {{else}}
+                      <span class="card-title yellow-text text-darken-2">LOW (0 lm)</span>
+                    {{/if}}
                     <p>Light</p>
                   </div>
                 </div>
@@ -52,10 +60,10 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-thermometer-half large-status-icon yellow-text text-darken-2"></i>
+                    <i class="fas fa-thermometer-half large-status-icon green-text"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title yellow-text text-darken-2">TOO HIGH</span>
+                    <span class="card-title green-text">GOOD ({{currentStats.sensorTempFehr}}<span>&#176;</span>)</span>
                     <p>Temperature</p>
                   </div>
                 </div>
@@ -67,10 +75,10 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-cloud-rain large-status-icon yellow-text text-darken-2"></i>
+                    <i class="fas fa-cloud-rain large-status-icon red-text"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title yellow-text text-darken-2">TOO LOW</span>
+                    <span class="card-title red-text">BAD ({{currentStats.precipIntensity}} in/hr)</span>
                     <p>Precipitation</p>
                   </div>
                 </div>
@@ -82,10 +90,14 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-smog large-status-icon red-text"></i>
+                    <i class="fas fa-smog large-status-icon {{#if currentStats.humidity}}green-text{{else}}yellow-text text-darken-2{{/if}}"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title red-text">DANGER</span>
+                    {{#if currentStats.humidity}}
+                      <span class="card-title green-text">GOOD ({{currentStats.humidity}}%)</span>
+                    {{else}}
+                      <span class="card-title yellow-text text-darken-2">LOW (0%)</span>
+                    {{/if}}
                     <p>Humidity</p>
                   </div>
                 </div>
@@ -97,10 +109,14 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-wind large-status-icon red-text"></i>
+                    <i class="fas fa-wind large-status-icon {{#if currentStats.windSpeed}}yellow-text text-darken-2{{else}}green-text{{/if}}"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title red-text">DANGER</span>
+                    {{#if currentStats.windSpeed}}
+                      <span class="card-title yellow-text text-darken-2">HIGH ({{currentStats.windSpeed}} mph)</span>
+                    {{else}}
+                      <span class="card-title green-text">GOOD (0 mph)</span>
+                    {{/if}}
                     <p>Wind Speed</p>
                   </div>
                 </div>
