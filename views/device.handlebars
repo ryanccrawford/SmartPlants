@@ -8,7 +8,7 @@
     <div class="row">
       <div class="col s12 pt-1">
         <a href="/users/{{device.User.userName}}" class="left-align">Back to Devices</a>
-        <h3 class="center-align mt-0">{{device.User.userName}}'s  {{device.Plant.plantName}}</h3>
+        <h3 class="center-align mt-0 deviceHead">{{device.User.userName}}'s  {{device.Plant.plantName}}</h3>
         <ul class="tabs tabs-fixed-width z-depth-1">
           <li class="tab col s3"><a href="#summaryTab" class="active">Summary</a></li>
           <li class="tab col s3"><a href="#chartTab">Chart</a></li>
@@ -22,10 +22,14 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-tint large-status-icon green-text"></i>
+                    <i class="fas fa-tint large-status-icon {{#if currentStats.moisture}}green-text{{else}}yellow-text text-darken-2{{/if}}"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title green-text">GOOD</span>
+                    {{#if currentStats.moisture}}
+                      <span class="card-title green-text">GOOD ({{currentStats.moisture}}%)</span>
+                    {{else}}
+                      <span class="card-title yellow-text text-darken-2">LOW (0%)</span>
+                    {{/if}}
                     <p>Moisture</p>
                   </div>
                 </div>
@@ -37,10 +41,14 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-sun large-status-icon green-text"></i>
+                    <i class="fas fa-sun large-status-icon {{#if currentStats.light}}green-text{{else}}yellow-text text-darken-2{{/if}}"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title green-text">GOOD</span>
+                    {{#if currentStats.light}}
+                      <span class="card-title green-text">GOOD ({{currentStats.light}} lm)</span>
+                    {{else}}
+                      <span class="card-title yellow-text text-darken-2">LOW (0 lm)</span>
+                    {{/if}}
                     <p>Light</p>
                   </div>
                 </div>
@@ -52,10 +60,10 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-thermometer-half large-status-icon yellow-text text-darken-2"></i>
+                    <i class="fas fa-thermometer-half large-status-icon green-text"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title yellow-text text-darken-2">TOO HIGH</span>
+                    <span class="card-title green-text">GOOD ({{currentStats.sensorTempFehr}}<span>&#176;</span>)</span>
                     <p>Temperature</p>
                   </div>
                 </div>
@@ -67,10 +75,10 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-cloud-rain large-status-icon yellow-text text-darken-2"></i>
+                    <i class="fas fa-cloud-rain large-status-icon red-text"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title yellow-text text-darken-2">TOO LOW</span>
+                    <span class="card-title red-text">BAD ({{currentStats.precipIntensity}} in/hr)</span>
                     <p>Precipitation</p>
                   </div>
                 </div>
@@ -82,10 +90,14 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-smog large-status-icon red-text"></i>
+                    <i class="fas fa-smog large-status-icon {{#if currentStats.humidity}}green-text{{else}}yellow-text text-darken-2{{/if}}"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title red-text">DANGER</span>
+                    {{#if currentStats.humidity}}
+                      <span class="card-title green-text">GOOD ({{currentStats.humidity}}%)</span>
+                    {{else}}
+                      <span class="card-title yellow-text text-darken-2">LOW (0%)</span>
+                    {{/if}}
                     <p>Humidity</p>
                   </div>
                 </div>
@@ -97,10 +109,14 @@
               <div class="card-content">
                 <div class="row margin-0">
                   <div class="col s3 center-align">
-                    <i class="fas fa-wind large-status-icon red-text"></i>
+                    <i class="fas fa-wind large-status-icon {{#if currentStats.windSpeed}}yellow-text text-darken-2{{else}}green-text{{/if}}"></i>
                   </div>
                   <div class="col s9">
-                    <span class="card-title red-text">DANGER</span>
+                    {{#if currentStats.windSpeed}}
+                      <span class="card-title yellow-text text-darken-2">HIGH ({{currentStats.windSpeed}} mph)</span>
+                    {{else}}
+                      <span class="card-title green-text">GOOD (0 mph)</span>
+                    {{/if}}
                     <p>Wind Speed</p>
                   </div>
                 </div>
@@ -134,7 +150,7 @@
         <div id="chart"></div>
       </div>
       <div id="dataTab" class="col s12 card">
-        <table id="dataTable">
+        <table id="dataTable" style="display: none;">
           <thead>
             <tr>
               <th>Timestamp</th>
@@ -160,6 +176,7 @@
 <div class="grassDiv">
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
