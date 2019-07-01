@@ -9,7 +9,7 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/api/user/:userName", function(req, res) {
+  app.get("/api/users/:userName", function(req, res) {
     db.User.findOne({ where: { userName: req.params.userName } }).then(function(
       user
     ) {
@@ -17,9 +17,9 @@ module.exports = function(app) {
     });
   });
 
-  app.post("/api/user", function(req, res) {
+  app.post("/api/users", function(req, res) {
     db.User.create(req.body)
-      .then(function(dbUser) {
+      .then(function(dbUser) {                                                                                                                                                                      
         res.json(dbUser);
       })
       .catch(function(err) {
@@ -35,7 +35,7 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/api/device/:id", function(req, res) {
+  app.get("/api/devices/:id", function(req, res) {
     db.Device.findOne({
       where: {
         id: req.params.id
@@ -46,7 +46,7 @@ module.exports = function(app) {
     });
   });
 
-  app.post("/api/device", function(req, res) {
+  app.post("/api/devices", function(req, res) {
     if (!("UserId" in req.body)) {
       console.log("bad request - UserId not included");
       res.status(400).end();
@@ -65,7 +65,7 @@ module.exports = function(app) {
     }
   });
 
-  app.put("/api/device", function(req, res) {
+  app.put("/api/devices", function(req, res) {
     if (!("DeviceId" in req.body)) {
       console.log("bad request - DeviceId not included");
       res.status(400).end();
@@ -89,7 +89,7 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/api/plant/:id", function(req, res) {
+  app.get("/api/plants/:id", function(req, res) {
     db.Plant.findOne({
       where: { id: req.params.id }
     }).then(function(plant) {
@@ -97,7 +97,7 @@ module.exports = function(app) {
     });
   });
 
-  app.post("/api/plant", function(req, res) {
+  app.post("/api/plants", function(req, res) {
     db.Plant.create(req.body)
       .then(function(dbPlant) {
         res.json(dbPlant);
@@ -165,22 +165,6 @@ module.exports = function(app) {
         console.log(err);
         res.status(400).end();
       });
-  });
-
-  app.post("/api/live", function(req, res) {
-    if (!("DeviceId" in req.body)) {
-      console.log("bad request - DeviceId not included");
-      res.status(400).end();
-    } else {
-      db.LiveStats.create(req.body)
-        .then(function(data) {
-          res.json(data);
-        })
-        .catch(function(err) {
-          console.log(err);
-          res.status(400).end();
-        });
-    }
   });
 
   app.get("/api/hist", function(req, res) {
