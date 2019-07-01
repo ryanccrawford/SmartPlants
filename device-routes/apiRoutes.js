@@ -1,4 +1,7 @@
 const db = require("../models");
+Number.prototype.map = function (in_min, in_max, out_min, out_max) {
+    return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 module.exports = function (app) {
 
@@ -97,5 +100,32 @@ module.exports = function (app) {
             }
        });
     
+    app.get("/api/livegauge/:type/:valnow/:deviceId", function (req, res) {
+        var lastVal = parseInt(req.params.valnow)
+        var type = req.params.type.toLowerCase()
+        var deviceId = parseInt(req.params.deviceId);
+        if (typeof deviceId !== 'number') {
+            return
+        }
+        if (type === "moisture") {
 
+            var sqlQuery = "SELECT moisture ";
+            sqlQuery += " FROM liveStats ";
+            sqlQuery += " WHERE 1=" + deviceId + " ";  
+            sqlQuery += "ORDER BY timeStamp DESC";
+            sqlQuery += " LIMIT 1;";
+
+            db.sequelize
+                .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
+                .then(function (data) {
+                    console.log(data)
+
+                    res.json(data);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    res.status(400).end();
+                });
+        }
+    });
 }
