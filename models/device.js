@@ -5,7 +5,15 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       validate: { len: [4, 16] }
     },
+    deviceIp: {
+      type: DataTypes.STRING,
+      validate: { isIP: true }
+    },
     isDeviceConnected: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    isWatering: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
@@ -20,22 +28,21 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Device.associate = function(models) {
-    // We're saying that a Post should belong to an Author
-    // A Post can't be created without an Author due to the foreign key constraint
     Device.belongsTo(models.User, {
       foreignKey: {
         allowNull: false
       }
     });
-    Device.hasMany(models.LiveStats, {
+    Device.belongsTo(models.Plant, {
       foreignKey: {
         allowNull: false
       }
     });
+    Device.hasMany(models.LiveStats, {
+      onDelete: "cascade"
+    });
     Device.hasMany(models.HistStats, {
-      foreignKey: {
-        allowNull: false
-      }
+      onDelete: "cascade"
     });
   };
 

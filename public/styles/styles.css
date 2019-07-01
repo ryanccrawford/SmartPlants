@@ -23,6 +23,7 @@
 body{
   position:relative;
   width: 100%;
+  overflow-x: hidden;
 }
 
 .sky{
@@ -32,7 +33,7 @@ body{
 
 .grassDiv{
   background-color:rgb(194, 248, 167);
-  height: 300px;
+  height: 1000px;
   border-top: white 10px solid;
   position:relative;
   z-index: 3;
@@ -44,7 +45,7 @@ body{
   height: 300px;
   border-radius: 40%;
   top: 150px;
-  left: 11%;
+  left: 21%;
  
   color: #613d16;
   z-index: 10;
@@ -88,7 +89,8 @@ body{
   padding-top: 80px;
 }
 
-.landingButton{
+.landingButton,
+.deviceButton{
   background-color: rgb(229, 252, 249);
   color: 
   rgb(110, 109, 109);
@@ -120,6 +122,13 @@ body{
   z-index: 15;
   top: 120px;
   
+  width: 100%;
+}
+
+.entireInfo{
+  position: absolute;
+  z-index: 15;
+  top: 20px;
   width: 100%;
 }
 
@@ -241,3 +250,42 @@ body{
   }
 
 }
+
+
+
+/*Devices page*/
+.plantsHead
+{
+  color: #613d16;
+  margin-top: 100px;
+}
+
+.entireDevices{
+  top: 90px;
+}
+
+
+
+.cardsDiv{
+  margin-top: 70px;
+  color: #613d16;
+}
+
+
+.card{
+  border-radius:   30px;
+  margin-bottom: 40px;
+}
+
+.card-image{
+  margin: 20px;
+}
+
+.deviceHead{
+  color: #613d16;
+}
+
+
+
+
+

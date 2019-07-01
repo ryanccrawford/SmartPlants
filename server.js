@@ -1,4 +1,3 @@
-require("dotenv").config();
 var express = require("express");
 var exphbs = require("express-handlebars");
 
@@ -24,7 +23,7 @@ app.set("view engine", "handlebars");
 // Routes
 require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);
-
+require("./device-routes/apiRoutes")(app);
 var syncOptions = { force: false };
 
 // If running a test, set syncOptions.force to true

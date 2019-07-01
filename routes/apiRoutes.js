@@ -1,8 +1,5 @@
 var db = require("../models");
 var request = require("request");
-const weather = require('../weather/weather.js')
-var Op = db.Sequelize.Op;
-var moment = require("moment");
 
 module.exports = function(app) {
   // users functions
@@ -12,7 +9,7 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/api/user/:userName", function(req, res) {
+  app.get("/api/users/:userName", function(req, res) {
     db.User.findOne({ where: { userName: req.params.userName } }).then(function(
       user
     ) {
@@ -20,7 +17,7 @@ module.exports = function(app) {
     });
   });
 
-  app.post("/api/user", function(req, res) {
+  app.post("/api/users", function(req, res) {
     db.User.create(req.body)
       .then(function(dbUser) {
         res.json(dbUser);
@@ -38,13 +35,18 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/api/device/:id", function(req, res) {
-    db.Device.findOne({ where: { id: req.params.id } }).then(function(device) {
+  app.get("/api/devices/:id", function(req, res) {
+    db.Device.findOne({
+      where: {
+        id: req.params.id
+      },
+      include: [db.LiveStats]
+    }).then(function(device) {
       res.json(device);
     });
   });
 
-  app.post("/api/device", function(req, res) {
+  app.post("/api/devices", function(req, res) {
     if (!("UserId" in req.body)) {
       console.log("bad request - UserId not included");
       res.status(400).end();
@@ -63,6 +65,23 @@ module.exports = function(app) {
     }
   });
 
+  app.put("/api/devices", function(req, res) {
+    if (!("DeviceId" in req.body)) {
+      console.log("bad request - DeviceId not included");
+      res.status(400).end();
+    } else {
+      db.Device.update(
+        {
+          isWatering: req.body.isWatering,
+          isDeviceConnected: req.body.isDeviceConnected
+        },
+        { where: { id: req.body.DeviceId } }
+      ).then(function(resp) {
+        res.json(resp);
+      });
+    }
+  });
+
   // plant functions
   app.get("/api/plants", function(req, res) {
     db.Plant.findAll({}).then(function(plants) {
@@ -70,7 +89,7 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/api/plant/:id", function(req, res) {
+  app.get("/api/plants/:id", function(req, res) {
     db.Plant.findOne({
       where: { id: req.params.id }
     }).then(function(plant) {
@@ -78,7 +97,7 @@ module.exports = function(app) {
     });
   });
 
-  app.post("/api/plant", function(req, res) {
+  app.post("/api/plants", function(req, res) {
     db.Plant.create(req.body)
       .then(function(dbPlant) {
         res.json(dbPlant);
@@ -90,9 +109,9 @@ module.exports = function(app) {
   });
 
   app.get("/api/live", function(req, res) {
-    var interval = req.body.interval;
-    var range = req.body.range;
-    var deviceId = req.body.deviceId;
+    var interval = req.query.interval;
+    var range = req.query.range;
+    var deviceId = req.query.deviceId;
 
     var sqlQuery = "SELECT ";
 
@@ -135,9 +154,10 @@ module.exports = function(app) {
     }
 
     sqlQuery += " GROUP BY tTime ";
+    sqlQuery += " ORDER BY tTime ;";
 
     db.sequelize
-      .query(sqlQuery)
+      .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
       .then(function(data) {
         res.json(data);
       })
@@ -147,48 +167,12 @@ module.exports = function(app) {
       });
   });
 
- app.post("/api/live", function (req, res) {
-
-        var sensordata = {
-            moisture: req.body.soil,
-            light: req.body.light,
-            sensorTempFehr: req.body.temp,
-            DeviceId: req.body.DeviceId
-        }
-     console.log(sensordata)
-     weather(callback, "Orlando FL", "32792")
-
-        function callback(returnWeather) {
-            var current = returnWeather[0].current
-            sensordata.weatherTemp = current.temperature;
-            sensordata.precipIntensity = current.skycode;
-            sensordata.humidity = current.humidity;
-            sensordata.windSpeed = current.windspeed.split(" ")[0];
-
-            if (!("DeviceId" in sensordata)) {
-                console.log("bad request - DeviceId not included");
-                res.status(400).end();
-            } else {
-                db.LiveStats.create(sensordata)
-                    .then(function (data) {
-                        res.json(data);
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                        res.status(400).end();
-                    });
-
-
-            }
-
-        }
-
-    });
-
   app.get("/api/hist", function(req, res) {
-    var interval = req.body.interval;
-    var range = req.body.range;
-    var deviceId = req.body.deviceId;
+    var interval = req.query.interval;
+    var range = req.query.range;
+    var deviceId = req.query.deviceId;
+
+    console.log(interval, range);
 
     var sqlQuery = "SELECT ";
 
@@ -227,13 +211,14 @@ module.exports = function(app) {
       sqlQuery += " AND timeStamp > NOW() - INTERVAL 1 " + range;
     }
     if (typeof deviceId !== "undefined") {
-      sqlQuery += " AND DeviceID = " + DeviceId;
+      sqlQuery += " AND DeviceId = " + deviceId;
     }
 
     sqlQuery += " GROUP BY tTime ";
+    sqlQuery += " ORDER BY tTime ;";
 
     db.sequelize
-      .query(sqlQuery)
+      .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
       .then(function(data) {
         res.json(data);
       })

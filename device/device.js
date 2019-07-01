@@ -1,6 +1,6 @@
 const five = require("johnny-five");
-const request = require('request-json');
-
+const request = require("request-json");
+const publicIP = require("public-ip");
 
 function J5(confg, cb) {
     
@@ -8,6 +8,9 @@ function J5(confg, cb) {
     this.soilVal = 0
     this.tempVal = 0 
     this.relayState = "closed"
+    this.isWatering = false
+    this.zip = ""
+    this.deviceIp = ""
     this.config = confg
     this.deviceId = this.config[6].DEVICE_UID
     this.comPort = this.config[5].USB_PORT
@@ -31,6 +34,8 @@ function J5(confg, cb) {
         console.log("Soil:" + bord.soilVal)
         console.log("Temp:" + bord.tempVal)
         console.log("Relay: " + bord.relayState)
+        console.log("Is Watering: " + bord.isWatering)
+        console.log("Device Public IP: " + bord.deviceIp)
     }
     this.relay = function (state) {
 
@@ -41,7 +46,7 @@ function J5(confg, cb) {
         //TODO:
     }
     this.timerId
-    this.timer = function () {
+    this.timer = function () {      
      this.timerId = setInterval(this.loop, this.interval);
     }
     this.discLoop = function () {
@@ -62,7 +67,11 @@ function J5(confg, cb) {
         if (bord.tempVal === undefined || bord.soilVal === undefined || bord.lightVal === undefined || bord.relayState === undefined){
             return
         }
-        var data = {DeviceId: bord.deviceId, temp: bord.tempVal, soil: bord.soilVal, light: bord.lightVal, relayState: bord.relayState }
+        console.log(bord)
+        var data = {DeviceId: bord.deviceId, temp: bord.tempVal, soil: bord.soilVal, light: bord.lightVal, isWatering: bord.isWatering, deviceIp: bord.deviceIp }
+        if (bord.zip) {
+            data.zip = bord.zip
+        }
         var client = request.createClient(bord.serviceURL);
         client.post(bord.serviceURL, data, function (error, response, body) {
             if (error) {
@@ -72,10 +81,15 @@ function J5(confg, cb) {
             if (response && response.statusCode) {
 
                 console.log(response.statusCode)
-
-                if (body) {
-                    var commands
-                    if (commands = body === undefined) {
+                console.log(body)
+             if (body) {
+                    var reslt = JSON.parse(body)
+                    if (reslt.zip) {
+                        console.log("inside device ")
+                        bord.zip = reslt.zip
+                    }
+                    var commands = reslt
+                    if (commands === undefined) {
                         console.log("nothing to do")
                         return
                     }
@@ -90,14 +104,16 @@ function J5(confg, cb) {
                          bord.lcd(commands.lcd)
                      }
              }
-         }
+        }
         }
         )
     }
     var bord = this;
     board = new five.Board({ port: this.comPort, repl: false, })
    
-        
+    publicIP.v4().then(function (ipval) {
+        bord.deviceIp = ipval;
+    });
    
 
     board.on('ready', function () {
@@ -134,9 +150,11 @@ function J5(confg, cb) {
            if (state === "open") {
                relay.open();
                bord.relayState = 'opened'
+               bord.isWatering = true
            } else {
                relay.close();
                bord.relayState = 'closed'
+               bord.isWatering = false
            }
        }
 
