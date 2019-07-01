@@ -1,15 +1,11 @@
-require("dotenv").config();
-const weather = require('../weather/weather.js')
-const apiKey = process.env.APIKEY;
-const GoogleMapsAPIKEY = process.env.GOOGLE_API_KEY;
-const request = require("request");
-const endpoint = 'http://api.ipstack.com';
 const db = require("../models");
-var zip
+Number.prototype.map = function (in_min, in_max, out_min, out_max) {
+    return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 module.exports = function (app) {
 
-    app.post('/api/createSampledata', function (req, res) {
+    app.post('/api/createSampledata/', function (req, res) {
 
         var sun = 0, temp = 80, hum = 0, rain = 0, wind = 2, season = 0, sunisnight = false, soil = 200, isWatering = false, timestamp = "", time;
         var dt = new Date();
@@ -84,185 +80,52 @@ module.exports = function (app) {
     })
 
     app.post("/api/live/", function (req, res) {
-       var sensordata = {
-            moisture: req.body.soil,
-            light: req.body.light,
-            sensorTempFehr: req.body.temp,
-            DeviceId: req.body.deviceId,
-            deviceIp: req.body.deviceIp,
-            isWatering: req.body.isWatering
-        }
-        function callback(returnWeather) {
-            
-            if (!("DeviceId" in sensordata)) {
+       // var weather = req.body.weather;
+        console.log("inside server live Route")
+        console.log(req.body)
+        var sensorData = req.body
+        if (!("DeviceId" in sensorData)) {
                 console.log("bad request - DeviceId not included");
-                res.status(400).end();
+                res.json({ "error": "400"}).end();
             } else {
-                console.log(sensordata)
-                console.log(returnWeather)
-
-                sensordata.weatherTemp = typeof returnWeather[0].current.temperature !== 'undefined' ? returnWeather[0].current.temperature : 0;
-                sensordata.precipIntensity = typeof returnWeather[0].current.skycode !== 'undefined' ? returnWeather[0].current.skycode : 0;
-                sensordata.humidity = typeof returnWeather[0].current.humidity !== 'undefined' ? returnWeather[0].current.humidity : 0;
-                sensordata.windSpeed = typeof returnWeather[0].current.windspeed.split(" ")[0] !== 'undefined' ? returnWeather[0].current.windspeed.split(" ")[0] : 0;
-
-                db.LiveStats.create(sensordata)
+            console.log(sensorData)
+            db.LiveStats.create(sensorData)
                     .then(function (data) {
                         res.json(data);
                     })
                     .catch(function (err) {
                         console.log(err);
-                        res.status(400).end();
+                        res.json({"error":"400"}).end();
                     });
             }
-        }
-		
-        if (!req.body.zip && !zip) {
-            var uri = `/api/getzipfromip/${sensordata.deviceIp}`;
-            console.log(uri);
-            request("http://localhost:3000" + uri, function (error, response, body) {
-                if (error) {
-                    console.log(error)
-                }
-                if (response && response.statusCode) {
-                    var bodyresponse = JSON.parse(body)
-                    var zipc = bodyresponse;
-                    zip = zipc
-                    console.log(bodyresponse)
-                    weather(callback, zipc);
-
-                }
-
-            });
-        } else {
-            weather(callback, zip);
-        }
-        
-     });
+       });
     
-	app.get("/api/geolocate/:ipaddress", function (req, res) {
+    app.get("/api/livegauge/:type/:valnow/:deviceId", function (req, res) {
+        var lastVal = parseInt(req.params.valnow)
+        var type = req.params.type.toLowerCase()
+        var deviceId = parseInt(req.params.deviceId);
+        if (typeof deviceId !== 'number') {
+            return
+        }
+        if (type === "moisture") {
 
-		var ip = req.params.ipaddress;
+            var sqlQuery = "SELECT moisture ";
+            sqlQuery += " FROM liveStats ";
+            sqlQuery += " WHERE 1=" + deviceId + " ";  
+            sqlQuery += "ORDER BY timeStamp DESC";
+            sqlQuery += " LIMIT 1;";
 
-		geolocate(ip);
+            db.sequelize
+                .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
+                .then(function (data) {
+                    console.log(data)
 
-		function geolocate(ipadd) {
-
-			var uri = `${endpoint}/${ipadd}?access_key=${apiKey}&format=1`;
-			console.log(uri);
-
-			request(uri, function (error, response, body) {
-				if (error) {
-					console.log(error)
-				}
-                if (response && response.statusCode) {
-       
-
-                    var locationObj = JSON.parse(body)
-                    console.log(locationObj)
-                    var locationCord = {
-                        latitude: locationObj.latitude,
-                        longitude: locationObj.longitude
-					}
-                    console.log(locationCord)
-					res.json(locationCord);
-
-				}
-
-			});
-		}
-
-	});
-
-	app.get("/api/getzipfromlatlog/:lat/:long", function (req, res) {
-
-
-		var lattitude = req.params.lat;
-		var longitute = req.params.long;
-		var geoLocation = { lat: lattitude, long: longitute }
-		reverseGeoLocate(geoLocation);
-
-		function reverseGeoLocate(latlong) {
-			var googleEndPoint = 'https://maps.googleapis.com/maps/api/geocode/json'
-			var uri = `${googleEndPoint}?latlng=${latlong.lat},${latlong.long}&key=${GoogleMapsAPIKEY}`
-			console.log(uri);
-
-			request(uri, function (error, response, body) {
-				if (error) {
-					console.log(error)
-				}
-				if (response && response.statusCode) {
-					var zip_code = "";
-                    var results = JSON.parse(body).results
-                    console.log("IN GOOGLE MAPS CALL")
-					var components = results[0].address_components
-					components.forEach(function (item) {
-						item.types.forEach(function (part) {
-							if (part === 'postal_code') {
-                                zip_code = item.short_name
-                                zip = zip_code
-							}
-						})
-					})
-
-					res.json({ zip: zip_code });
-
-				}
-
-			});
-		}
-
-	});
-
-	app.get("/api/getzipfromip/:ip", function (req, res) {
-
-		var ip = req.params.ip
-
-		locate(ip);
-
-		function locate(ipadd) {
-
-			var uri = `/api/geolocate/${ipadd}`;
-			console.log(uri);
-
-			request("http://localhost:3000" + uri, function (error, response, body) {
-				if (error) {
-					console.log(error)
-				}
-				if (response && response.statusCode) {
-					var locationObj = JSON.parse(body)
-					getzipcode(locationObj)
-                    function getzipcode(lo) {
-                        console.log(lo)
-                        var lat = lo.latitude
-                        var long = lo.longitude
-                        var uri = `/api/getzipfromlatlog/${lat}/${long}`;
-						console.log(uri);
-
-						request("http://localhost:3000" + uri, function (error, response, body) {
-							if (error) {
-								console.log(error)
-							}
-							if (response && response.statusCode) {
-								var obj = JSON.parse(body)
-
-								alldone(obj.zip)
-
-							}
-
-						});
-
-					}
-
-				}
-
-			});
-		}
-
-	});
-
-	function alldone(zip) {
-        console.log(zip)
-        return
-	}
+                    res.json(data);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    res.status(400).end();
+                });
+        }
+    });
 }
