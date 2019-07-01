@@ -143,7 +143,7 @@ module.exports = function(app) {
       " avg(precipIntensity) as precipIntensity, " +
       " avg(humidity) as humidity, " +
       " avg(windSpeed) as windSpeed ";
-    sqlQuery += " FROM liveStats ";
+    sqlQuery += " FROM LiveStats ";
 
     sqlQuery += " WHERE 1=1 ";
     if (typeof range !== "undefined") {
@@ -204,7 +204,7 @@ module.exports = function(app) {
       " avg(precipIntensity) as precipIntensity, " +
       " avg(humidity) as humidity, " +
       " avg(windSpeed) as windSpeed ";
-    sqlQuery += " FROM liveStats ";
+    sqlQuery += " FROM HistStats ";
 
     sqlQuery += " WHERE 1=1 ";
     if (typeof range !== "undefined") {
