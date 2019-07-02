@@ -190,9 +190,10 @@ $(document).ready(function() {
         var record = data[0];
         var newAmount = parseInt(record.moisture).map(0, 30, 0, 100);
         moistureGaugeVal = parseInt(newAmount);
-        $("#moisture .gauge-arrow")
-          .trigger("updateGauge", moistureGaugeVal)
-          .attr("data-percentage", moistureGaugeVal.toString());
+        $("#moisture .gauge-arrow").trigger("updateGauge", moistureGaugeVal);
+        $("#moisture")
+          .next()
+          .text(moistureGaugeVal.toString() + "%");
       }
     );
   }, 5000);
