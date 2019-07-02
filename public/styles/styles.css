@@ -10,6 +10,14 @@
   margin-top: 0 !important;
 }
 
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.mt-2 {
+  margin-top: 2rem !important;
+}
+
 .pt-1 {
   padding-top: 1rem !important;
 }

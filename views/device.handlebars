@@ -22,131 +22,31 @@
 
             {{> device/statcard-block property="Moisture" icon="fa-tint" value=currentStats.moisture unit="%" maxValue=1024}}
 
-            <!--<div class="card">
-              <div class="card-content green-text">
-                <div class="row margin-0">
-                  <div class="col s6 center-align">
-                    <p class="card-title">Moisture</p>
-                    <i
-                      class="fas fa-tint large-status-icon"></i>
-                  </div>
-                  <div class="col s6">
-                    <div class="card-body center-align">
-                      <div id="moisture" class="gauge gauge-medium gauge-green">
-                        <div class="gauge-arrow gauge-blue" data-percentage="0" style="transform: rotate(-90deg);">
-                        </div>
-                      </div>
-                      <span class="card-title">({{currentStats.moisture}}%)</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>-->
           </div>
           <div class="col s12 m6 xl4">
 
             {{> device/statcard-block property="Light" icon="fa-sun" value=currentStats.light unit="%" maxValue=1024}}
 
-            <!--<div class="card">
-              <div class="card-content">
-                <div class="row margin-0">
-                  <div class="col s3 center-align">
-                    <i
-                      class="fas fa-sun large-status-icon {{#if currentStats.light}}green-text{{else}}yellow-text text-darken-2{{/if}}"></i>
-                  </div>
-                  <div class="col s9">
-                    {{#if currentStats.light}}
-                    <span class="card-title green-text">GOOD ({{currentStats.light}} lm)</span>
-                    {{else}}
-                    <span class="card-title yellow-text text-darken-2">LOW (0 lm)</span>
-                    {{/if}}
-                    <p>Light</p>
-                  </div>
-                </div>
-              </div>
-            </div>-->
           </div>
           <div class="col s12 m6 xl4">
 
             {{> device/statcard-block property="Temperature" icon="fa-thermometer-half " value=currentStats.sensorTempFehr unit="°" maxValue=100}}
 
-            <!--<div class="card">
-              <div class="card-content">
-                <div class="row margin-0">
-                  <div class="col s3 center-align">
-                    <i class="fas fa-thermometer-half large-status-icon green-text"></i>
-                  </div>
-                  <div class="col s9">
-                    <span class="card-title green-text">GOOD ({{currentStats.sensorTempFehr}}<span>&#176;</span>)</span>
-                    <p>Temperature</p>
-                  </div>
-                </div>
-              </div>
-            </div>-->
           </div>
           <div class="col s12 m6 xl4">
 
             {{> device/statcard-block property="Precipitation" icon="fa-cloud-rain" value=currentStats.precipIntensity unit="%" maxValue=1024}}
 
-            <!--<div class="card">
-              <div class="card-content">
-                <div class="row margin-0">
-                  <div class="col s3 center-align">
-                    <i class="fas fa-cloud-rain large-status-icon red-text"></i>
-                  </div>
-                  <div class="col s9">
-                    <span class="card-title red-text">BAD ({{currentStats.precipIntensity}} in/hr)</span>
-                    <p>Precipitation</p>
-                  </div>
-                </div>
-              </div>
-            </div>-->
           </div>
           <div class="col s12 m6 xl4">
 
             {{> device/statcard-block property="Humidity" icon="fa-smog" value=currentStats.humidity unit="%" maxValue=1024}}
 
-            <!--<div class="card">
-              <div class="card-content">
-                <div class="row margin-0">
-                  <div class="col s3 center-align">
-                    <i
-                      class="fas fa-smog large-status-icon {{#if currentStats.humidity}}green-text{{else}}yellow-text text-darken-2{{/if}}"></i>
-                  </div>
-                  <div class="col s9">
-                    {{#if currentStats.humidity}}
-                    <span class="card-title green-text">GOOD ({{currentStats.humidity}}%)</span>
-                    {{else}}
-                    <span class="card-title yellow-text text-darken-2">LOW (0%)</span>
-                    {{/if}}
-                    <p>Humidity</p>
-                  </div>
-                </div>
-              </div>
-            </div>-->
           </div>
           <div class="col s12 m6 xl4">
 
             {{> device/statcard-block property="Wind" icon="fa-wind" value=currentStats.windSpeed unit=" mph" maxValue=10}}
 
-            <!--<div class="card">
-              <div class="card-content">
-                <div class="row margin-0">
-                  <div class="col s3 center-align">
-                    <i
-                      class="fas fa-wind large-status-icon {{#if currentStats.windSpeed}}yellow-text text-darken-2{{else}}green-text{{/if}}"></i>
-                  </div>
-                  <div class="col s9">
-                    {{#if currentStats.windSpeed}}
-                    <span class="card-title yellow-text text-darken-2">HIGH ({{currentStats.windSpeed}} mph)</span>
-                    {{else}}
-                    <span class="card-title green-text">GOOD (0 mph)</span>
-                    {{/if}}
-                    <p>Wind Speed</p>
-                  </div>
-                </div>
-              </div>
-            </div>-->
           </div>
         </div>
       </div>
