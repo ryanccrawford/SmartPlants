@@ -109,8 +109,8 @@ module.exports = function (app) {
         }
         if (type === "moisture") {
 
-            var sqlQuery = "SELECT moisture ";
-            sqlQuery += " FROM liveStats ";
+        var sqlQuery = "SELECT moisture ";
+            sqlQuery += " FROM LiveStats ";
             sqlQuery += " WHERE 1=" + deviceId + " ";  
             sqlQuery += "ORDER BY timeStamp DESC";
             sqlQuery += " LIMIT 1;";
