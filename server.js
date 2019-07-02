@@ -15,7 +15,8 @@ app.use(express.static("device"));
 app.engine(
   "handlebars",
   exphbs({
-    defaultLayout: "main"
+    defaultLayout: "main",
+    helpers: require("./views/helpers")
   })
 );
 app.set("view engine", "handlebars");

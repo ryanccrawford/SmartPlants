@@ -9,6 +9,9 @@ const endpoint = 'http://api.ipstack.com';
 var zip = null
 var weatherObj = null
 var sensorObj = {}
+var lastLevel = 0
+const isHex = require('is-hex')
+
 
 Number.prototype.map = function (in_min, in_max, out_min, out_max) {
     return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -68,11 +71,20 @@ function J5(confg, cb) {
     this.zip = "";
     this.deviceIp = "";
     this.config = confg;
+    this.tempPin = "A3"
+    this.lightPin = "A4"
+    this.soilPin = "A0"
+    this.relayPin = "2"
+    this.redPin = "9"
+    this.greenPin = "10"
+    this.bluePin = "11"
     this.color = "#00ff00"
     this.DeviceId = this.config[6].DEVICE_UID;
     this.comPort = this.config[5].USB_PORT;
-    this.serviceURL = "http://" + this.config[0].REMOTE_SERVER + ":" + this.config[1].REMOTE_SERVER_PORT + "/api/hist";
-    this.liveURL = "http://" + this.config[0].REMOTE_SERVER + ":" + this.config[1].REMOTE_SERVER_PORT + "/api/live";
+    this.serviceURL = "http://" + this.config[0].REMOTE_SERVER + "/api/hist";
+    this.liveURL = "http://" + this.config[0].REMOTE_SERVER + "/api/live";
+   // this.serviceURL = "http://" + this.config[0].REMOTE_SERVER + ":" + this.config[1].REMOTE_SERVER_PORT + "/api/hist";
+    //this.liveURL = "http://" + this.config[0].REMOTE_SERVER + ":" + this.config[1].REMOTE_SERVER_PORT + "/api/live";
     this.interval = parseInt(this.config[4].HIST_INTERVAL);
     this.liveInterval = parseInt(this.config[9].LIVE_INTERVAL);
     this.setThisWeather = function (weatherobj) {
@@ -249,101 +261,112 @@ function J5(confg, cb) {
     var bord = this;
 
     board = new five.Board({ port: this.comPort, repl: false, })
-
     publicIP.v4().then(function (ipval) {
         bord.deviceIp = ipval;
         bord.getWeatherFn(bord.deviceIp)
+
         setInterval(start, (60000 * 60));
     });
 
     function start() {
         bord.getWeatherFn(bord.deviceIp);
     }
+   
     board.on('ready', function () {
       
+            var led = new five.Led.RGB({
+                pins: {
+                    red: bord.redPin,
+                    green: bord.greenPin,
+                    blue: bord.bluePin
+                },
+                isAnode: true
+            });
+            led.color("#0000ff");
+            led.intensity(3);
 
-      
- 
-
-        var led =   new five.Led.RGB({
-            pins: {
-                red: 13,
-                green: 12,
-                blue: 11
-            },
-            isAnode: true
-        });
-        led.color("#0000ff");
-        led.intensity(3);
-
-        var photoresistor = new five.Sensor("A0")
-        var soilMoisture = new five.Sensor("A1")
-        var tempsensor = new five.Thermometer({
-            controller: "LM35",
-            pin: "A2"
-        })
-        var relay = new five.Relay({
-            type: "NC",
-            pin: 2
-        });
-        relay.close()
-        function r(state) {
-            if (state === "open") {
-                relay.open();
-                bord.relayState = 'opened'
-                bord.isWatering = true
-            } else {
-                relay.close();
-                bord.relayState = 'closed'
-                bord.isWatering = false
-            }
-        }
-
-        photoresistor.on("data", function () {
-            bord.setLight(this.value)
-            sensorObj.isWatering = bord.isWatering
-        })
-        soilMoisture.on("data", function () {
-            //in_min, in_max, out_min, out_max
-            bord.setSoil(this.value)
-            if (bord.isfading) {
-
-                return
+            var photoresistor = new five.Sensor(bord.lightPin)
+            var soilMoisture = new five.Sensor(bord.soilPin)
+            var tempsensor = new five.Thermometer({
+                controller: "LM35",
+                pin: bord.tempPin
+            })
+            var relay = new five.Relay({
+                type: "NC",
+                pin: bord.relayPin
+            });
+            relay.close()
+            function r(state) {
+                if (state === "open") {
+                    relay.open();
+                    bord.relayState = 'opened'
+                    bord.isWatering = true
+                } else {
+                    relay.close();
+                    bord.relayState = 'closed'
+                    bord.isWatering = false
+                }
             }
 
-            bord.isfading = true
-            function dec2hexString(dec) {
-                return  (dec + 0x10000).toString(16).substr(-2).toUpperCase();
-            }
+            photoresistor.on("data", function () {
+                bord.setLight(this.value)
+                sensorObj.isWatering = bord.isWatering
+            })
+            soilMoisture.on("data", function () {
+                //in_min, in_max, out_min, out_max
+                bord.setSoil(this.value)
+                if (bord.isfading) {
 
-            var mappedBrightness = parseInt((this.value).map(100, 420, 0, 255))
-         
-           
+                    return
+                }
+
+                bord.isfading = true
+                function dec2hexString(dec) {
+                    return (dec + 0x10000).toString(16).substr(-2).toUpperCase();
+                }
+
+
+                if (this.value < 0 || this.value > 1024) {
+
+                    return
+
+                }
+
+                var mappedBrightness = parseInt(this.value).map(0, 1024, 0, 255)
+
+
                 var redb = dec2hexString(mappedBrightness)
-              
+
                 var greenb = dec2hexString(255 - mappedBrightness)
-                
-                 
-                var hexstring = "#" + redb + greenb + "00"
+
+
+                var hexstring = redb + greenb + "00"
                 bord.color = hexstring
-                led.color(hexstring)
+                if (isHex(hexstring)) {
+                    console.log(hexstring)
+                        led.color("#"+hexstring)
+                }
                 
 
-            if (this.value > 350) {
-                r("close");
-            } else {
-                r("open");
-            }
-           
-            bord.isfading = false
-        })
-        
-        tempsensor.on("data", function () {
-            bord.setTemp(this.F / 2)
-        })
-        console.log('Device is connected');
-        cb(bord)
 
+                if (this.value > 350) {
+                    r("close");
+                } else {
+                    r("open");
+                }
+
+                bord.isfading = false
+            })
+
+            tempsensor.on("data", function () {
+                bord.setTemp(this.F / 2)
+            })
+            console.log('Device is connected');
+
+
+        
+   
+        cb(bord)
     })
     board.on('close', function () {
         console.log("Sensor Has Disconnected")

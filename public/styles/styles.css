@@ -10,6 +10,14 @@
   margin-top: 0 !important;
 }
 
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.mt-2 {
+  margin-top: 2rem !important;
+}
+
 .pt-1 {
   padding-top: 1rem !important;
 }
@@ -18,7 +26,7 @@
   font-size: 48px;
 }
 
-
+html{overflow-x: hidden;}
 /*Landing page*/
 body{
   position:relative;
@@ -204,6 +212,46 @@ body{
 }
 
 
+/*Devices page*/
+.plantsHead
+{
+  color: #613d16;
+  margin-top: 100px;
+}
+
+.entireDevices{
+  top: 90px;
+}
+
+
+
+.cardsDiv{
+  margin-top: 70px;
+  color: #613d16;
+}
+
+
+.card{
+  border-radius:   30px;
+  margin-bottom: 40px;
+}
+
+.card-image{
+  margin: 20px;
+}
+
+.deviceHead{
+  color: #613d16;
+}
+
+.deviceButton{
+  position: relative;
+  z-index: 25;
+  background-color: #e8fdfd;
+}
+
+
+
 @media screen and (max-width: 992px) {
   .sky{
     height: 400px;
@@ -239,7 +287,7 @@ body{
 
   .landingPic{
     z-index: 20;
-    left: 62%;
+    left: 72%;
     top: 300px;
 
   }
@@ -249,41 +297,14 @@ body{
     left: 5px;
   }
 
+  #smallDevicePic{
+    display: none;
+  }
 }
 
 
 
-/*Devices page*/
-.plantsHead
-{
-  color: #613d16;
-  margin-top: 100px;
-}
 
-.entireDevices{
-  top: 90px;
-}
-
-
-
-.cardsDiv{
-  margin-top: 70px;
-  color: #613d16;
-}
-
-
-.card{
-  border-radius:   30px;
-  margin-bottom: 40px;
-}
-
-.card-image{
-  margin: 20px;
-}
-
-.deviceHead{
-  color: #613d16;
-}
 
 
 
