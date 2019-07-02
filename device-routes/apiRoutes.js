@@ -111,7 +111,7 @@ module.exports = function (app) {
 
         var sqlQuery = "SELECT moisture ";
             sqlQuery += " FROM LiveStats ";
-            sqlQuery += " WHERE 1=" + deviceId + " ";  
+            sqlQuery += " WHERE DeviceId=" + deviceId + " ";  
             sqlQuery += "ORDER BY timeStamp DESC";
             sqlQuery += " LIMIT 1;";
 
@@ -127,5 +127,47 @@ module.exports = function (app) {
                     res.status(400).end();
                 });
         }
+        if (type === "light") {
+
+            var sqlQuery = "SELECT light ";
+            sqlQuery += " FROM LiveStats ";
+            sqlQuery += " WHERE DeviceId=" + deviceId + " ";
+            sqlQuery += "ORDER BY timeStamp DESC";
+            sqlQuery += " LIMIT 1;";
+
+            db.sequelize
+                .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
+                .then(function (data) {
+                    console.log(data)
+
+                    res.json(data);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    res.status(400).end();
+                });
+        }
+        if (type === "temp") {
+
+            var sqlQuery = "SELECT sensorTempFehr ";
+            sqlQuery += " FROM LiveStats ";
+            sqlQuery += " WHERE DeviceId=" + deviceId + " ";
+            sqlQuery += "ORDER BY timeStamp DESC";
+            sqlQuery += " LIMIT 1;";
+
+            db.sequelize
+                .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
+                .then(function (data) {
+                    console.log(data)
+
+                    res.json(data);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    res.status(400).end();
+                });
+        }
+
+
     });
 }

@@ -71,6 +71,13 @@ function J5(confg, cb) {
     this.zip = "";
     this.deviceIp = "";
     this.config = confg;
+    this.tempPin = "A3"
+    this.lightPin = "A4"
+    this.soilPin = "A0"
+    this.relayPin = "2"
+    this.redPin = "9"
+    this.greenPin = "10"
+    this.bluePin = "11"
     this.color = "#00ff00"
     this.DeviceId = this.config[6].DEVICE_UID;
     this.comPort = this.config[5].USB_PORT;
@@ -269,24 +276,24 @@ function J5(confg, cb) {
       
             var led = new five.Led.RGB({
                 pins: {
-                    red: 13,
-                    green: 12,
-                    blue: 11
+                    red: bord.redPin,
+                    green: bord.greenPin,
+                    blue: bord.bluePin
                 },
                 isAnode: true
             });
             led.color("#0000ff");
             led.intensity(3);
 
-            var photoresistor = new five.Sensor("A0")
-            var soilMoisture = new five.Sensor("A1")
+            var photoresistor = new five.Sensor(bord.lightPin)
+            var soilMoisture = new five.Sensor(bord.soilPin)
             var tempsensor = new five.Thermometer({
                 controller: "LM35",
-                pin: "A2"
+                pin: bord.tempPin
             })
             var relay = new five.Relay({
                 type: "NC",
-                pin: 2
+                pin: bord.relayPin
             });
             relay.close()
             function r(state) {
@@ -342,7 +349,7 @@ function J5(confg, cb) {
                 
 
 
-                if (this.value < 350) {
+                if (this.value > 350) {
                     r("close");
                 } else {
                     r("open");
