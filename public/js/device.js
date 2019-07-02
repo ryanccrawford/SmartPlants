@@ -1,4 +1,8 @@
 $(document).ready(function() {
+  Number.prototype.map = function(inMin, inMax, outMin, outMax) {
+    return outMin + ((this - inMin) / (inMax - inMin)) * (outMax - outMin);
+  };
+
   var histData;
 
   function getDataFromRange(range) {
@@ -170,4 +174,24 @@ $(document).ready(function() {
     .catch(function(error) {
       throw error;
     });
+
+  $(".gauge-arrow").cmGauge();
+
+  var moistureGaugeVal = 0;
+  $("#moisture .gauge-arrow").attr(
+    "data-percentage",
+    moistureGaugeVal.toString()
+  );
+
+  setInterval(function() {
+    var deviceId = window.location.pathname.replace("/devices/", "");
+    $.get("/api/livegauge/moisture/" + moistureGaugeVal + "/" + deviceId).then(
+      function(data) {
+        var record = data[0];
+        var newAmount = parseInt(record.moisture).map(0, 30, 0, 100);
+        moistureGaugeVal = parseInt(newAmount);
+        $("#moisture .gauge-arrow").trigger("updateGauge", moistureGaugeVal);
+      }
+    );
+  }, 5000);
 });
