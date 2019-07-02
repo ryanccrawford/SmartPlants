@@ -100,8 +100,8 @@ module.exports = function (app) {
             }
        });
     
-    app.get("/api/livegauge/:type/:valnow/:deviceId", function (req, res) {
-        var lastVal = parseInt(req.params.valnow)
+    app.get("/api/livegauge/:type/:deviceId", function (req, res) {
+        //var lastVal = parseInt(req.params.valnow)
         var type = req.params.type.toLowerCase()
         var deviceId = parseInt(req.params.deviceId);
         if (typeof deviceId !== 'number') {

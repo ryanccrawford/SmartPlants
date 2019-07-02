@@ -8,11 +8,11 @@
       <div class="col s6">
         <div class="card-body center-align">
           <div id="{{lower property}}" class="gauge gauge-medium gauge-green">
-            <div class="gauge-arrow gauge-blue" data-percentage="{{#if maxValue}}{{percent value maxValue}}{{else}}0{{/if}}" style="transform: rotate(-90deg);">
+            <div class="gauge-arrow gauge-blue" data-percentage="{{percent value maxValue minValue}}" style="transform: rotate(-90deg);">
             </div>
           </div>
           <span class="card-title">(
-            {{#ifEquals unit "%"}}{{percent value maxValue}}{{else}}{{value}}{{/ifEquals}}{{unit}}
+            {{#ifEquals unit "%"}}{{percent value maxValue minValue}}{{else}}{{value}}{{/ifEquals}}{{unit}}
             )</span>
         </div>
       </div>
