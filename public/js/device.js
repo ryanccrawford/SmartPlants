@@ -177,24 +177,59 @@ $(document).ready(function() {
 
   $(".gauge-arrow").cmGauge();
 
-  var moistureGaugeVal = 0;
-  $("#moisture .gauge-arrow").attr(
-    "data-percentage",
-    moistureGaugeVal.toString()
-  );
+  //var moistureGaugeVal = 0;
+  //$("#moisture .gauge-arrow").attr(
+  //  "data-percentage",
+  //  moistureGaugeVal.toString()
+  //);
+
+  function getLiveDataAndUpdateGauge(property, minValue, maxValue, deviceId) {
+    $.get("/api/livegauge/" + property + "/" + deviceId).then(function(data) {
+      var record = data[0];
+      var newAmount;
+      if (property === "temperature") {
+        newAmount = parseInt(record.sensorTempFehr).map(
+          minValue,
+          maxValue,
+          0,
+          100
+        );
+      } else {
+        newAmount = parseInt(record[property]).map(minValue, maxValue, 0, 100);
+      }
+      var moistureGaugeVal = parseInt(newAmount);
+      //console.log(record);
+      $("#" + property + " .gauge-arrow").trigger(
+        "updateGauge",
+        moistureGaugeVal
+      );
+      var unit;
+      if (property === "temperature") {
+        unit = "°";
+      } else {
+        unit = "%";
+      }
+      $("#" + property)
+        .next()
+        .text("( " + moistureGaugeVal.toString() + unit + " )");
+    });
+  }
 
   setInterval(function() {
     var deviceId = window.location.pathname.replace("/devices/", "");
-    $.get("/api/livegauge/moisture/" + moistureGaugeVal + "/" + deviceId).then(
-      function(data) {
-        var record = data[0];
-        var newAmount = parseInt(record.moisture).map(0, 30, 0, 100);
-        moistureGaugeVal = parseInt(newAmount);
-        $("#moisture .gauge-arrow").trigger("updateGauge", moistureGaugeVal);
-        $("#moisture")
-          .next()
-          .text(moistureGaugeVal.toString() + "%");
-      }
-    );
-  }, 5000);
+    getLiveDataAndUpdateGauge("moisture", 0, 1024, deviceId);
+    getLiveDataAndUpdateGauge("light", 1024, 0, deviceId);
+    getLiveDataAndUpdateGauge("temperature", -20, 125, deviceId);
+    /*
+    $.get("/api/livegauge/moisture/" + deviceId).then(function(data) {
+      var record = data[0];
+      var newAmount = parseInt(record.moisture).map(0, 1024, 0, 100);
+      var moistureGaugeVal = parseInt(newAmount);
+      $("#moisture .gauge-arrow").trigger("updateGauge", moistureGaugeVal);
+      $("#moisture")
+        .next()
+        .text(moistureGaugeVal.toString() + "%");
+    });
+    */
+  }, 1000);
 });
