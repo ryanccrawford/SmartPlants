@@ -142,6 +142,14 @@ module.exports = function (app) {
         db.sequelize
             .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
             .then(function (data) {
+                if (type === "moisture") {
+                    var temp = parseInt(data[0].moisture).map(0, 1023, 0, 100).toString()
+                    data[0].moisture = temp
+                }
+                if (type === "light") {
+                    var temp = parseInt(data[0].light).map(0, 1023, 0, 100).toString()
+                    data[0].light = temp
+                }
                 console.log(data)
 
                 res.json(data);
