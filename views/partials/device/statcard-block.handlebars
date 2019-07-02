@@ -1,0 +1,21 @@
+<div class="card">
+  <div class="card-content green-text">
+    <div class="row margin-0">
+      <div class="col s6 center-align">
+        <p class="card-title">{{property}}</p>
+        <i class="fas {{icon}} large-status-icon"></i>
+      </div>
+      <div class="col s6">
+        <div class="card-body center-align">
+          <div id="{{lower property}}" class="gauge gauge-medium gauge-green">
+            <div class="gauge-arrow gauge-blue" data-percentage="{{#if maxValue}}{{percent value maxValue}}{{else}}0{{/if}}" style="transform: rotate(-90deg);">
+            </div>
+          </div>
+          <span class="card-title">(
+            {{#ifEquals unit "%"}}{{percent value maxValue}}{{else}}{{value}}{{/ifEquals}}{{unit}}
+            )</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
