@@ -147,7 +147,7 @@ module.exports = function (app) {
                     res.status(400).end();
                 });
         }
-        if (type === "temp") {
+        if (type === "temperature") {
 
             var sqlQuery = "SELECT sensorTempFehr ";
             sqlQuery += " FROM LiveStats ";

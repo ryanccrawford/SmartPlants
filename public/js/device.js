@@ -186,16 +186,32 @@ $(document).ready(function() {
   function getLiveDataAndUpdateGauge(property, minValue, maxValue, deviceId) {
     $.get("/api/livegauge/" + property + "/" + deviceId).then(function(data) {
       var record = data[0];
-      var newAmount = parseInt(record.moisture).map(minValue, maxValue, 0, 100);
+      var newAmount;
+      if (property === "temperature") {
+        newAmount = parseInt(record.sensorTempFehr).map(
+          minValue,
+          maxValue,
+          0,
+          100
+        );
+      } else {
+        newAmount = parseInt(record[property]).map(minValue, maxValue, 0, 100);
+      }
       var moistureGaugeVal = parseInt(newAmount);
-      console.log(record);
+      //console.log(record);
       $("#" + property + " .gauge-arrow").trigger(
         "updateGauge",
         moistureGaugeVal
       );
+      var unit;
+      if (property === "temperature") {
+        unit = "°";
+      } else {
+        unit = "%";
+      }
       $("#" + property)
         .next()
-        .text(moistureGaugeVal.toString() + "%");
+        .text("( " + moistureGaugeVal.toString() + unit + " )");
     });
   }
 
@@ -215,5 +231,5 @@ $(document).ready(function() {
         .text(moistureGaugeVal.toString() + "%");
     });
     */
-  }, 5000);
+  }, 1000);
 });
