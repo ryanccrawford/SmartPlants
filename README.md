@@ -38,8 +38,10 @@ Nice to have but not required
 
 ## Building ##
 
-![This is an image of the plans to build Spmart Plants](http://ryancrawford.me/assets/downloads/smartplants_build.jpg" Build Diagram")
 
+![This is an image of the plans to build Spmart Plants][info]
+
+[info]: http://ryancrawford.me/assets/downloads/smartplants_build.jpg "Logo Title Text 2"
 
 ## FIRMATA & ESP FLASHING ##
 You will need to flash FirmmataPlus onto the Ardunio first. Note if using WiFi, you will need to adjust the BAUD rate to match the ESP8266. Some ESP's ar 115200 by defualt. This may need some Google Fu to make sure you can pre configuare the Ardunio.
