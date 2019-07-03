@@ -9,6 +9,7 @@ module.exports = {
     if (!minValue) {
       minValue = 0;
     }
-    return parseInt(((value - minValue) / (maxValue - minValue)) * 100);
+    //return parseInt(((value - minValue) / (maxValue - minValue)) * 100);
+    return value
   }
 };
