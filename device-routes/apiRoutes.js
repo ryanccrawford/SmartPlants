@@ -117,7 +117,7 @@ module.exports = function (app) {
         if (type === "light") {
             column = "light"         
         }
-        if (type === "temp") {
+        if (type === "temperature") {
           column = "sensorTempFehr"
         }
         if (type === "rain") {
