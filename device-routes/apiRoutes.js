@@ -101,73 +101,62 @@ module.exports = function (app) {
        });
     
     app.get("/api/livegauge/:type/:deviceId", function (req, res) {
-        //var lastVal = parseInt(req.params.valnow)
+        
         var type = req.params.type.toLowerCase()
         var deviceId = parseInt(req.params.deviceId);
+
         if (typeof deviceId !== 'number') {
             return
         }
+        var sqlQuery = "";
+        var column = "";
+
         if (type === "moisture") {
-
-        var sqlQuery = "SELECT moisture ";
-            sqlQuery += " FROM LiveStats ";
-            sqlQuery += " WHERE DeviceId=" + deviceId + " ";  
-            sqlQuery += "ORDER BY timeStamp DESC";
-            sqlQuery += " LIMIT 1;";
-
-            db.sequelize
-                .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
-                .then(function (data) {
-                    console.log(data)
-
-                    res.json(data);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                    res.status(400).end();
-                });
+            column = "moisture"        
         }
         if (type === "light") {
-
-            var sqlQuery = "SELECT light ";
-            sqlQuery += " FROM LiveStats ";
-            sqlQuery += " WHERE DeviceId=" + deviceId + " ";
-            sqlQuery += "ORDER BY timeStamp DESC";
-            sqlQuery += " LIMIT 1;";
-
-            db.sequelize
-                .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
-                .then(function (data) {
-                    console.log(data)
-
-                    res.json(data);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                    res.status(400).end();
-                });
+            column = "light"         
         }
-        if (type === "temperature") {
-
-            var sqlQuery = "SELECT sensorTempFehr ";
-            sqlQuery += " FROM LiveStats ";
-            sqlQuery += " WHERE DeviceId=" + deviceId + " ";
-            sqlQuery += "ORDER BY timeStamp DESC";
-            sqlQuery += " LIMIT 1;";
-
-            db.sequelize
-                .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
-                .then(function (data) {
-                    console.log(data)
-
-                    res.json(data);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                    res.status(400).end();
-                });
+        if (type === "temp") {
+          column = "sensorTempFehr"
+        }
+        if (type === "rain") {
+            column = "precipIntensity"
+        }
+        if (type === "humidity") {
+            column = "humidity"
+        }
+        if (type === "windSpeed") {
+            column = "windSpeed"  
+        }
+        if (type === "waterison") {
+            column = "isWatering"
         }
 
+        sqlQuery += "SELECT `" + column + "` ";
+        sqlQuery += " FROM LiveStats ";
+        sqlQuery += " WHERE DeviceId=" + deviceId + " ";
+        sqlQuery += "ORDER BY timeStamp DESC";
+        sqlQuery += " LIMIT 1;";
 
+        db.sequelize
+            .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })
+            .then(function (data) {
+                if (type === "moisture") {
+                    var temp = parseInt(data[0].moisture).map(0, 1023, 0, 100).toString()
+                    data[0].moisture = temp
+                }
+                if (type === "light") {
+                    var temp = parseInt(data[0].light).map(0, 1023, 0, 100).toString()
+                    data[0].light = temp
+                }
+                console.log(data)
+
+                res.json(data);
+            })
+            .catch(function (err) {
+                console.log(err);
+                res.status(400).end();
+            });
     });
 }

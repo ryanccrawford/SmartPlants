@@ -9,7 +9,6 @@ const endpoint = 'http://api.ipstack.com';
 var zip = null
 var weatherObj = null
 var sensorObj = {}
-var lastLevel = 0
 const isHex = require('is-hex')
 
 
@@ -81,8 +80,8 @@ function J5(confg, cb) {
     this.color = "#00ff00"
     this.DeviceId = this.config[6].DEVICE_UID;
     this.comPort = this.config[5].USB_PORT;
-    this.serviceURL = "http://" + this.config[0].REMOTE_SERVER + "/api/hist";
-    this.liveURL = "http://" + this.config[0].REMOTE_SERVER + "/api/live";
+    this.serviceURL = "https://" + this.config[0].REMOTE_SERVER + "/api/hist";
+    this.liveURL = "https://" + this.config[0].REMOTE_SERVER + "/api/live";
    // this.serviceURL = "http://" + this.config[0].REMOTE_SERVER + ":" + this.config[1].REMOTE_SERVER_PORT + "/api/hist";
     //this.liveURL = "http://" + this.config[0].REMOTE_SERVER + ":" + this.config[1].REMOTE_SERVER_PORT + "/api/live";
     this.interval = parseInt(this.config[4].HIST_INTERVAL);
@@ -332,15 +331,26 @@ function J5(confg, cb) {
 
                 }
 
-                var mappedBrightness = parseInt(this.value).map(0, 1024, 0, 255)
-
-
-                var redb = dec2hexString(mappedBrightness)
-
-                var greenb = dec2hexString(255 - mappedBrightness)
-
-
-                var hexstring = redb + greenb + "00"
+                //var mappedBrightness = parseInt(this.value).map(0, 1023, 0, 255)
+                var hex = dec2hexString(255)
+                var redb = "00"
+                var greenb = "00"
+                var blueb = "00"
+                if (this.value < 350) {
+                    redb = hex
+                   
+                }
+                if (this.value >= 350 && this.value <= 500) {
+                    greenb = hex
+                    blueb = "00"
+                    redb = "00"
+                }
+                if (this.value > 500) {
+                    blueb = hex
+                    redb = "00"
+                    greenb = "00"
+                }
+                var hexstring = redb + greenb + blueb
                 bord.color = hexstring
                 if (isHex(hexstring)) {
                     console.log(hexstring)
@@ -349,7 +359,7 @@ function J5(confg, cb) {
                 
 
 
-                if (this.value > 350) {
+                if (this.value < 350) {
                     r("close");
                 } else {
                     r("open");
