@@ -134,10 +134,10 @@ module.exports = function (app) {
         }
 
         sqlQuery += "SELECT `" + column + "` ";
-        sqlQuery += " FROM LiveStats ";
-        sqlQuery += " WHERE DeviceId=" + deviceId + " ";
-        sqlQuery += "ORDER BY timeStamp DESC";
-        sqlQuery += " LIMIT 1;";
+        sqlQuery += "FROM LiveStats ";
+        sqlQuery += "WHERE DeviceId=" + deviceId + " ";
+        sqlQuery += "ORDER BY timeStamp DESC ";
+        sqlQuery += "LIMIT 1;";
 
         db.sequelize
             .query(sqlQuery, { type: db.sequelize.QueryTypes.SELECT })

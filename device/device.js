@@ -395,11 +395,14 @@ function J5(confg, cb) {
 }
 
 function combineData(sensorData, weatherData) {
+    var reverseRangeSoil = 100 - parseInt(sensorData.moisture.map(0, 1023, 0, 100))
+    var reverseRangeLight = 100 - parseInt(sensorData.light.map(0, 1023, 0, 100))
+
     return {
         DeviceId: sensorData.DeviceId,
         sensorTempFehr: sensorData.sensorTempFehr,
-        moisture: sensorData.moisture,
-        light: sensorData.light,
+        moisture: reverseRangeSoil,
+        light: reverseRangeLight,
         isWatering: sensorData.isWatering ? 1:0,
         //deviceIp: sensorData.deviceIp,
         weatherTemp: weatherData.weatherTemp,
