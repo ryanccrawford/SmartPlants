@@ -17,24 +17,24 @@ NODE_ENV=development
 Also to get any meaningful use out of this web app, you'll need to build your own SmartPlant Device. Below are the items needed and instructions:
 
 ## Parts ## 
-- 1. Ardunio Uno / Nano / Mega 2556 / or anyboard compatibale with Firmata, Information here https://github.com/firmata/arduino
-- 2. PHOTOCELL - Risistor type
-- 3. 4.7kΩ Resistor
-- 4. LM35 Temperature Sensor
-- 5. Analog capacitive soil moisture sensor with a 5VDC input and an anolog output
-- 6. Breadbord or Prototyping board, hookup wires and a USB cable 
+- Ardunio Uno / Nano / Mega 2556 / or anyboard compatibale with Firmata, Information here https://github.com/firmata/arduino
+- PHOTOCELL - Risistor type
+- 7kΩ Resistor
+- LM35 Temperature Sensor
+- Analog capacitive soil moisture sensor with a 5VDC input and an anolog output
+- Breadbord or Prototyping board, hookup wires and a USB cable 
 Optional (This is for making the device wireless)
-- 6. ESP8266
-- 7. A usb ESP2866 programer 
-- 8. LD1117V 3.3VDC voltage regulator modual (If you use just the regulator you will need the external supporting circuitry too)
-- 9. Any 3.3V - 5V bidirectional Logic Level Converter
+- ESP8266
+- A usb ESP2866 programer 
+- LD1117V 3.3VDC voltage regulator modual (If you use just the regulator you will need the external supporting circuitry too)
+- Any 3.3V - 5V bidirectional Logic Level Converter
 Optional II (This is for adding and LCD for information display)
-- 10. LCD either I2C or Parallel (Must be really small screen to be sure you don't go over max current. Could use seperate power supply)
-- 11. Variable Resistor for adjusting the LCD contrast
-- 12. RGB LED (Can use if don't want to use display but not both due to power limitations)
+- LCD either I2C or Parallel (Must be really small screen to be sure you don't go over max current. Could use seperate power supply)
+- Variable Resistor for adjusting the LCD contrast
+- RGB LED (Can use if don't want to use display but not both due to power limitations)
 Nice to have but not required
-- 13. Seperate battery power supply or other
-- 14. 9V-12V Solar panel
+- Seperate battery power supply or other
+- 9V-12V Solar panel
 
 ## Building ##
 
