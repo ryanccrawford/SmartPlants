@@ -20,32 +20,32 @@
         <div class="row">
           <div class="col s12 m6 xl4">
 
-            {{> device/statcard-block property="Moisture" icon="fa-tint" value=currentStats.moisture unit="%" maxValue=1024}}
+            {{> device/statcard-block property="Moisture" icon="fa-tint" value=currentStats.moisture unit="%" maxValue=1024 minValue=0}}
 
           </div>
           <div class="col s12 m6 xl4">
 
-            {{> device/statcard-block property="Light" icon="fa-sun" value=currentStats.light unit="%" maxValue=1024}}
+            {{> device/statcard-block property="Light" icon="fa-sun" value=currentStats.light unit="%" maxValue=0 minValue=1024}}
 
           </div>
           <div class="col s12 m6 xl4">
 
-            {{> device/statcard-block property="Temperature" icon="fa-thermometer-half " value=currentStats.sensorTempFehr unit="°" maxValue=100}}
+            {{> device/statcard-block property="Temperature" icon="fa-thermometer-half " value=currentStats.sensorTempFehr unit="°" maxValue=125 minValue=-20}}
 
           </div>
           <div class="col s12 m6 xl4">
 
-            {{> device/statcard-block property="Precipitation" icon="fa-cloud-rain" value=currentStats.precipIntensity unit="%" maxValue=1024}}
+            {{> device/statcard-block property="Precipitation" icon="fa-cloud-rain" value=currentStats.precipIntensity unit="%" maxValue=1024 minValue=0}}
 
           </div>
           <div class="col s12 m6 xl4">
 
-            {{> device/statcard-block property="Humidity" icon="fa-smog" value=currentStats.humidity unit="%" maxValue=1024}}
+            {{> device/statcard-block property="Humidity" icon="fa-smog" value=currentStats.humidity unit="%" maxValue=1024 minValue=0}}
 
           </div>
           <div class="col s12 m6 xl4">
 
-            {{> device/statcard-block property="Wind" icon="fa-wind" value=currentStats.windSpeed unit=" mph" maxValue=10}}
+            {{> device/statcard-block property="Wind" icon="fa-wind" value=currentStats.windSpeed unit=" mph" maxValue=10 minValue=0}}
 
           </div>
         </div>
