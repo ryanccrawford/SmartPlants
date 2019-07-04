@@ -183,25 +183,20 @@ $(document).ready(function() {
   //  moistureGaugeVal.toString()
   //);
 
-  function getLiveDataAndUpdateGauge(property, minValue, maxValue, deviceId) {
+  function getLiveDataAndUpdateGauge(property, minValue = 0, maxValue = 100, deviceId = 1) {
     $.get("/api/livegauge/" + property + "/" + deviceId).then(function(data) {
       var record = data[0];
       var newAmount;
-      if (property === "temperature") {
-        newAmount = parseInt(record.sensorTempFehr).map(
-          minValue,
-          maxValue,
-          0,
-          100
-        );
-      } else {
-        newAmount = parseInt(record[property]).map(minValue, maxValue, 0, 100);
+        if (property === "temperature") {
+            newAmount = parseInt(record.sensorTempFehr);
+        } else {
+            newAmount = parseInt(record[property]);
       }
-      var moistureGaugeVal = parseInt(newAmount);
+      var GaugeVal = parseInt(newAmount);
       //console.log(record);
       $("#" + property + " .gauge-arrow").trigger(
         "updateGauge",
-        moistureGaugeVal
+        GaugeVal
       );
       var unit;
       if (property === "temperature") {
@@ -211,14 +206,14 @@ $(document).ready(function() {
       }
       $("#" + property)
         .next()
-        .text("( " + moistureGaugeVal.toString() + unit + " )");
+        .text("( " + GaugeVal.toString() + unit + " )");
     });
   }
 
   setInterval(function() {
     var deviceId = window.location.pathname.replace("/devices/", "");
-    getLiveDataAndUpdateGauge("moisture", 0, 1024, deviceId);
-    getLiveDataAndUpdateGauge("light", 1024, 0, deviceId);
+    getLiveDataAndUpdateGauge("moisture", 0, 100, deviceId);
+    getLiveDataAndUpdateGauge("light", 0, 100, deviceId);
     getLiveDataAndUpdateGauge("temperature", -20, 125, deviceId);
     /*
     $.get("/api/livegauge/moisture/" + deviceId).then(function(data) {
