@@ -10,6 +10,6 @@ module.exports = {
       minValue = 0;
     }
     //return parseInt(((value - minValue) / (maxValue - minValue)) * 100);
-    return value
+    return value * 100
   }
 };
