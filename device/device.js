@@ -353,7 +353,7 @@ function J5(confg, cb) {
                 var hexstring = redb + greenb + blueb
                 bord.color = hexstring
                 if (isHex(hexstring)) {
-                    console.log(hexstring)
+    
                         led.color("#"+hexstring)
                 }
                 
@@ -397,12 +397,13 @@ function J5(confg, cb) {
 function combineData(sensorData, weatherData) {
     var reverseRangeSoil = 100 - parseInt(sensorData.moisture.map(0, 1023, 0, 100))
     var reverseRangeLight = 100 - parseInt(sensorData.light.map(0, 1023, 0, 100))
-
+    console.log(reverseRangeSoil)
+        console.log(reverseRangeLight)
     return {
         DeviceId: sensorData.DeviceId,
         sensorTempFehr: sensorData.sensorTempFehr,
-        moisture: reverseRangeSoil,
-        light: reverseRangeLight,
+        moisture: parseInt(reverseRangeSoil),
+        light: parseInt(reverseRangeLight),
         isWatering: sensorData.isWatering ? 1:0,
         //deviceIp: sensorData.deviceIp,
         weatherTemp: weatherData.weatherTemp,
