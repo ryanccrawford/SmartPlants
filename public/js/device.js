@@ -190,7 +190,7 @@ $(document).ready(function() {
         if (property === "temperature") {
             newAmount = parseInt(record.sensorTempFehr);
         } else if (property === "light" || property === "moisture") {
-            newAmount = parseInt(record[property]) * 100;
+            newAmount = parseInt(record[property]) * 10;
         } else {
             newAmount = parseInt(record[property])
         }
