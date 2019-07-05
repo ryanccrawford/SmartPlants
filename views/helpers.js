@@ -11,5 +11,8 @@ module.exports = {
     }
    return parseInt(((value - minValue) / (maxValue - minValue)) * 100);
    
-  }
+    },
+    numbvalue: function (number) {
+        return parseInt(number)
+    }
 };
