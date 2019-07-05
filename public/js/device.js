@@ -189,9 +189,12 @@ $(document).ready(function() {
       var newAmount;
         if (property === "temperature") {
             newAmount = parseInt(record.sensorTempFehr);
+        } else if (property === "light" || property === "moisture") {
+            newAmount = parseInt(record[property]) * 100;
         } else {
-            newAmount = parseInt(record[property]);
-      }
+            newAmount = parseInt(record[property])
+        }
+
       var GaugeVal = parseInt(newAmount);
       //console.log(record);
       $("#" + property + " .gauge-arrow").trigger(
