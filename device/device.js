@@ -395,8 +395,8 @@ function J5(confg, cb) {
 }
 
 function combineData(sensorData, weatherData) {
-    var reverseRangeSoil = 100 - parseInt(sensorData.moisture.map(0, 1023, 0, 100))
-    var reverseRangeLight = 100 - parseInt(sensorData.light.map(0, 1023, 0, 100))
+    var reverseRangeSoil = parseInt(sensorData.moisture.map(1023, 0, 0, 100))
+    var reverseRangeLight =  parseInt(sensorData.light.map(1023, 0, 0, 100))
     console.log(reverseRangeSoil)
         console.log(reverseRangeLight)
     return {
