@@ -5,7 +5,7 @@
 
 ![Introduction][Introduction]
 
-[Introduction]: http://ryancrawford.me/smart.gif "Introduction"
+[Introduction]: http://ryancrawford.me/smart3.gif "Introduction"
 
 
 Welcome to view demo of this project visit https://smart-plants.herokuapp.com and use 'jan' as the username and enter any password.
