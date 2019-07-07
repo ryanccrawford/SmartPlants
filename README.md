@@ -66,7 +66,7 @@ Then if the device is running on the same computer make sure you know what USB t
 ```
 $ cd device
 $ npm i
-$ node server
+$ node server.js
 ```
 
 You should now beable to see data being sent to your app server
