@@ -1,6 +1,13 @@
 # Welcom to SmartPlants
 - Where plants are so smart you don't have to be
 
+https://drive.google.com/open?id=1tnLzrckZ0dM_IovprsJWrIPrgjBnn1s0
+
+![Introduction][intro]
+
+[intro]: https://drive.google.com/open?id=1tnLzrckZ0dM_IovprsJWrIPrgjBnn1s0 "Intro"
+
+
 Welcome to view demo of this project visit https://smart-plants.herokuapp.com and use 'jan' as the username and enter any password.
 
 To create this project on your own please feel free to clone using 
