@@ -1,12 +1,15 @@
 # Welcome to SmartPlants
 - Where plants are so smart you don't have to be
 
-
+smartplants.jpg
 
 ![Introduction][Introduction]
 
 [Introduction]: http://ryancrawford.me/smart3.gif "Introduction"
 
+![design][design]
+
+[design]: http://ryancrawford.me/smartplants.jpg "design"
 
 Welcome to view demo of this project visit https://smart-plants.herokuapp.com and use 'jan' as the username and enter any password.
 
