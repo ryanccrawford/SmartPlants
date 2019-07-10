@@ -74,6 +74,12 @@ $ node server.js
 
 You should now be able to see data being sent to your app server
 
+## The Future ##
+- Adding support for web sockets
+- Adding a manual watering button to control the water yourself
+- Adding a plant information database to show plant information and caring parameters.
+- Adding support for auto feeding systems
+- Adding a camera sensor to take time laps images to monitor growth and to compare and share with the community
 
 
 
