@@ -1,7 +1,7 @@
 # Welcome to SmartPlants
-- Where plants are so smart you don't have to be
+- Where plants are so smart you don't have to beThis Software / Hardware solution allows anyone to easily care for your plants. By monitoring the soil moisture, ambient light, temperature, and current forecast, SmartPlants can automatically water and feed your plants at just the right time. It's environmentally friendly by optimizing watering and feeding times. It won't water your plants if it’s going to rain or if it has already rained.
 
-smartplants.jpg
+SmartPlants also keeps historical data allowing you to visually see your plants heath over time. Plus, a live dashboard so you can see everything in real time.
 
 ![Introduction][Introduction]
 
