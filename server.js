@@ -1,5 +1,7 @@
 var express = require("express");
 var exphbs = require("express-handlebars");
+const passport = require("passport");
+const session = require("express-session");
 
 var db = require("./models");
 
@@ -11,6 +13,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.static("device"));
+
+// For Passport
+app.use(
+  session({
+    secret: process.env.PASSPORT_SECRET,
+    resave: true,
+    saveUninitialized: true
+  })
+); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
 // Handlebars
 app.engine(
   "handlebars",
@@ -25,6 +39,11 @@ app.set("view engine", "handlebars");
 require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);
 require("./device-routes/apiRoutes")(app);
+require("./routes/authRoutes")(app, passport);
+
+// Load passport strategies
+require("./config/passport/passport")(passport, db.User);
+
 var syncOptions = { force: false };
 
 // If running a test, set syncOptions.force to true

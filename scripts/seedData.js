@@ -1,4 +1,5 @@
 var csv = require("csvtojson");
+const bCrypt = require("bcrypt-nodejs");
 
 var db = require("../models");
 
@@ -15,9 +16,9 @@ db.sequelize
     }).then(function(dbPlant) {
       console.log("Creating fake user.");
       db.User.create({
-        userName: "user",
+        userName: "jan",
         email: "mail@mail.com",
-        password: "password"
+        password: bCrypt.hashSync("password", bCrypt.genSaltSync(8), null)
       }).then(function(dbUser) {
         console.log("Creating fake device.");
         db.Device.create({
