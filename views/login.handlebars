@@ -1,4 +1,3 @@
-
 <div class="loginSun"></div>
 <div class="skyDim"></div>
 <div class="sky"></div>
@@ -11,25 +10,24 @@
 
 
     <div class="row">
-        <form class="col s12 center-align">
+        <form action="/login" method="POST" class="col s12 center-align">
 
             <div class="row">
                 <div class="input-field col offset-s3 s6 offset-m3 m6 offset-l3 l6">
-                    <input id="user" type="text" class="validate">
+                    <input id="user" type="text" class="validate" name="userName">
                     <label for="user">Username:</label>
                 </div>
             </div>
 
             <div class="row">
                 <div class="input-field col offset-s3 s6 offset-m3 m6 offset-l3 l6">
-                    <input id="password" type="password" class="validate">
+                    <input id="password" type="password" class="validate" name="password">
                     <label for="password">Password:</label>
                 </div>
             </div>
 
+            <button type="submit" class="waves-effect waves-light btn">Login</button>
         </form>
-
-        <submit id="loginButton" class="waves-effect waves-light btn">Login</submit>
     </div>
 </div>
 
@@ -45,4 +43,4 @@
 <i class="material-icons cloud3 md-48">cloud</i>
 
 
-<script src="/js/login.js"></script>
+<!--<script src="/js/login.js"></script>-->
